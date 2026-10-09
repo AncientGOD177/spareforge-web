@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { OPERATOR, CONTACT_EMAIL, COUNTRY, UPDATED } from '../site';
+---
+<Base title="Privacy Policy · SpareForge" description="How spareforge.net and the SpareForge game handle your data.">
+  <div class="wrap prose">
+    <h1 style="font-size:2.4rem">Privacy Policy</h1>
+    <p class="note">Last updated: {UPDATED}</p>
+
+    <p>This policy covers the website spareforge.net and the game SpareForge. The operator is {OPERATOR}, {COUNTRY}. Contact: {CONTACT_EMAIL}.</p>
+
+    <h2>The website</h2>
+    <ul>
+      <li>The site does not use cookies, analytics, advertising or tracking scripts.</li>
+      <li>It loads no fonts, scripts or images from other companies. All files come from spareforge.net.</li>
+      <li>There are no accounts, forms or comment fields, so we do not collect personal information through the site.</li>
+      <li>Our hosting provider may keep standard server logs (for example IP address, time and requested page) for security and operations. We do not use them to identify visitors.</li>
+    </ul>
+
+    <h2>The game</h2>
+    <ul>
+      <li>SpareForge is a single-player game with LAN co-op. It does not require an account.</li>
+      <li>Save files stay on your own computer. The game does not send them to us.</li>
+      <li>LAN co-op connects computers on your own network. Traffic does not go through our servers.</li>
+    </ul>
+
+    <h2>Social media</h2>
+    <p>We publish game videos and posts on TikTok and Instagram. Those platforms process data under their own privacy policies when you watch or interact with our posts. We only receive the statistics the platforms show to every account holder, such as view counts.</p>
+
+    <h2>Discord</h2>
+    <p>The site links to our Discord server. If you join, Discord processes your data under its own privacy policy. We see what every server admin sees, such as your username and the messages you post in the server.</p>
+
+    <h2>Your rights</h2>
+    <p>Because we do not collect personal information on this site, there is normally nothing to access or delete. If you wrote to us by email, you can ask us to delete that correspondence at any time at {CONTACT_EMAIL}.</p>
+
+    <h2>Changes</h2>
+    <p>If we change this policy, the new version appears on this page with a new date.</p>
+  </div>
+</Base>

@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+import { LINKS } from '../site';
+interface Props { title?: string; description?: string; image?: string }
+const {
+  title = 'SpareForge: a pixel action RPG',
+  description = 'An original pixel-art action RPG. Six classes, twelve jobs, twenty regions, loot worth hunting and LAN co-op for up to four players.',
+  image = '/img/boss_0.webp',
+} = Astro.props;
+const url = new URL(Astro.url.pathname, Astro.site);
+const og = new URL(image, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#17120f" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={og} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <a class="brand" href="/">SpareForge</a>
+      <nav aria-label="Main">
+        <a href="/#features">Features</a>
+        <a href="/#screens">Screens</a>
+        <a href="/#status">Alpha</a>
+        <a class="nav-discord" href={LINKS.discord} rel="noopener">Discord</a>
+      </nav>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="foot">
+      <p>© 2026 SpareForge. All art is original pixel art made for the game.</p>
+      <p><a href={LINKS.discord} rel="noopener">Discord</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+    </footer>
+    <script>
+      // Reveal on scroll. Content stays visible without JS, IntersectionObserver or with reduced motion.
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('js-reveal');
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        items.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

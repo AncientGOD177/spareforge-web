@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import { LINKS } from '../site';
+
+const features = [
+  ['6 classes, 12 jobs', 'Start as a Wanderer, pick a class, then master a second job: Vanguard, Sorcerer, Ranger, Luminary, Forgemaster or Shadowblade.'],
+  ['Two kinds of levels', 'Base level up to 150 plus a separate job level. Spend stat points and build the character your way.'],
+  ['80+ skills', 'Every skill has its own effect, cast time and combo potential.'],
+  ['20 regions', 'Meadows, frozen passes, crystal caves, ashen wastes, sunken ruins and dark catacombs.'],
+  ['Bosses and Apex bosses', 'Field bosses, dungeon bosses and Apex fights with unique loot.'],
+  ['Loot in six rarities', 'Rare drops roll random prefixes and suffixes, from Crude to Perfect.'],
+  ['The forge', 'Refine, repair and reforge your gear until one line is perfect.'],
+  ['Cards, pets and mounts', 'Slot monster cards, let your pet pick up loot, ride from ponies to gryphons.'],
+  ['LAN co-op', 'Play together with up to four players on your home network.'],
+];
+
+const shots = [
+  ['boss_0', 'An Apex boss fight at Skyreach Citadel'],
+  ['town_0', 'Forge Town'],
+  ['combat_knight_0', 'Close-quarters combat'],
+  ['coop_0', 'LAN co-op with friends'],
+  ['worldmap_0', 'The world map'],
+  ['gear_0', 'Gear with random affixes'],
+  ['mount_0', 'Mounts'],
+  ['u_reforge_0', 'The reforge window'],
+  ['creator_0', 'Character creation'],
+];
+
+const store = [
+  ['Steam', LINKS.steam],
+  ['itch.io', LINKS.itch],
+].filter(([, href]) => href);
+---
+<Base>
+  <section class="hero">
+    <img src="/img/boss_0.webp" alt="" width="1280" height="720" fetchpriority="high" />
+    <div class="wrap">
+      <p class="tag">Pixel action RPG · Alpha</p>
+      <h1>SpareForge</h1>
+      <p class="lead">An original action RPG for players who miss the old online RPGs. Real-time combat, a deep job system and loot that keeps you hunting.</p>
+      <div class="cta">
+        {store.map(([name, href]) => <a class="btn primary" href={href} rel="noopener">Get it on {name}</a>)}
+        <a class="btn primary" href={LINKS.discord} rel="noopener">Join the Discord</a>
+        <a class="btn" href="#screens">See the game</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="alpha-bar" role="note">
+    <strong>Alpha build.</strong> SpareForge is in active development: expect bugs, balance changes and the occasional save reset. Your feedback shapes it.
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="stats" data-reveal>
+        <div><b>12</b><span>jobs</span></div>
+        <div><b>80+</b><span>skills</span></div>
+        <div><b>20</b><span>regions</span></div>
+        <div><b>150</b><span>max level</span></div>
+        <div><b>4</b><span>player co-op</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" style="padding-top:0">
+    <div class="wrap">
+      <h2 data-reveal>Forge your legend</h2>
+      <div class="grid">
+        {features.map(([title, text]) => (
+          <div class="card" data-reveal>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="screens" style="padding-top:0">
+    <div class="wrap">
+      <h2 data-reveal>In the game</h2>
+      <div class="shots">
+        {shots.map(([file, caption], i) => (
+          <figure data-reveal>
+            <img src={`/img/${file}.webp`} alt={caption} width="1280" height="720" loading={i < 3 ? 'eager' : 'lazy'} decoding="async" />
+            <figcaption>{caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="status" class="status">
+    <div class="wrap">
+      <h2 data-reveal>Development status</h2>
+      <p data-reveal>SpareForge is in <strong>Alpha</strong> and in active development. Here is what that means today:</p>
+      <ul data-reveal>
+        <li>Single-player and LAN co-op work.</li>
+        <li>Online co-op over Steam is planned before the beta.</li>
+        <li>Keyboard and mouse only for now.</li>
+        <li>No in-app purchases, and none are planned.</li>
+        <li>Alpha means bugs, balance changes and the occasional save reset. Back up your saves.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="community">
+    <div class="wrap">
+      <div class="discord" data-reveal>
+        <div>
+          <p class="tag">Community</p>
+          <h2>Join the forge on Discord</h2>
+          <p>Report bugs, share your builds, vote on what comes next and find a co-op party. Alpha testers get a direct line to the developer.</p>
+        </div>
+        <a class="btn primary" href={LINKS.discord} rel="noopener">Join the Discord</a>
+      </div>
+    </div>
+  </section>
+</Base>

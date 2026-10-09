@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { OPERATOR, CONTACT_EMAIL, UPDATED } from '../site';
+---
+<Base title="Terms of Service · SpareForge" description="Terms for using spareforge.net and the SpareForge game.">
+  <div class="wrap prose">
+    <h1 style="font-size:2.4rem">Terms of Service</h1>
+    <p class="note">Last updated: {UPDATED}</p>
+
+    <p>These terms apply to spareforge.net and to the game SpareForge, operated by {OPERATOR}. By using the site or the game you agree to them.</p>
+
+    <h2>Use of the site</h2>
+    <p>The site is provided for information about the game. Please do not misuse it, try to disrupt it or access it in automated ways that put load on it.</p>
+
+    <h2>The game</h2>
+    <ul>
+      <li>SpareForge is in Alpha. It can contain bugs, change between versions and lose progress. Back up your save files if they matter to you.</li>
+      <li>Unless a separate license says otherwise, you may play the game for personal, non-commercial use.</li>
+      <li>You may not resell, redistribute or reverse engineer the game or its assets.</li>
+    </ul>
+
+    <h2>Content</h2>
+    <p>The text, pixel art, music and other assets on this site and in the game belong to {OPERATOR} unless marked otherwise. You may share screenshots and videos of the game, including on social media and in streams.</p>
+
+    <h2>No warranty</h2>
+    <p>The site and the game are provided "as is", without warranties of any kind. To the extent the law allows, we are not liable for damages that result from using them.</p>
+
+    <h2>Changes and contact</h2>
+    <p>We may update these terms. The current version is always on this page. Questions: {CONTACT_EMAIL}.</p>
+  </div>
+</Base>

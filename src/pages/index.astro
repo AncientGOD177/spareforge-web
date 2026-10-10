@@ -15,15 +15,15 @@ const game = [
   ['LAN co-op', 'Play with up to four players on your home network.'],
 ];
 
-// Boss shot lives in the hero, so the gallery starts with the rest. `wide` tiles span two columns on large screens.
+// Real in-game scenes, 16:9. `wide` tiles span two columns on large screens (7 tiles fill three rows).
 const shots = [
-  ['town_0', 'Forge Town', true],
-  ['combat_knight_0', 'Close-quarters combat', false],
-  ['coop_0', 'LAN co-op with friends', false],
-  ['worldmap_0', 'The world map', true],
-  ['gear_0', 'Gear with random affixes', false],
-  ['mount_0', 'Mounts', false],
-  ['u_reforge_0', 'The reforge window', false],
+  ['gal_vanguard', 'Vanguard against a wolf pack', true],
+  ['gal_boss', 'Apex boss: Storm Seraph', false],
+  ['gal_coop', 'LAN co-op with friends', false],
+  ['gal_luminary', 'Luminary: Radiant Judgment', true],
+  ['gal_loot', 'Drops and loot', false],
+  ['gal_mount', 'Mounts across Gullwind Coast', false],
+  ['gal_ranger', 'Ranger in Frostveil Pass', false],
 ];
 
 const store = [
@@ -44,7 +44,7 @@ const store = [
         <a class="btn" href="#screens">See the game</a>
       </div>
       <figure class="window">
-        <img src="/img/boss_0.webp" alt="An Apex boss fight at Skyreach Citadel" width="1280" height="720" />
+        <img src="/img/hero_void.webp" alt="The Void Sovereign boss fight in the Void Sanctum" width="1280" height="720" />
       </figure>
     </div>
   </section>

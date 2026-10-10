@@ -60,7 +60,7 @@ const store = [
         <h2>Forge your legend</h2>
         <p>Real-time combat, a deep job system and loot that keeps you hunting. Alone, or with three friends on the same network.</p>
       </div>
-      <dl class="rows">
+      <dl class="rows grid">
         {game.map(([term, text]) => (
           <div class="row">
             <dt>{term}</dt>
@@ -85,14 +85,11 @@ const store = [
     </div>
   </section>
 
-  <section id="alpha" class="split">
-    <div class="wrap two">
-      <div class="two-head">
-        <h2>Where the alpha stands</h2>
-        <p>SpareForge is in active development. This is what works today and what is still planned.</p>
-      </div>
-      <dl class="rows">
-        <div class="row"><dt>Works today</dt><dd>Single-player and LAN co-op, keyboard and mouse.</dd></div>
+  <section id="alpha" class="alpha">
+    <div class="wrap">
+      <h2>Where the alpha stands</h2>
+      <dl class="rows inline">
+        <div class="row"><dt>Works today</dt><dd>Single-player and LAN co-op with keyboard and mouse.</dd></div>
         <div class="row"><dt>Planned</dt><dd>Online co-op over Steam before the beta, and in-app purchases later in the game's life. The alpha has none yet.</dd></div>
         <div class="row"><dt>Back up your saves</dt><dd>Alpha means bugs, balance changes and the occasional save reset.</dd></div>
       </dl>

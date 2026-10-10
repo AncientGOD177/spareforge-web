@@ -118,7 +118,7 @@ section { padding: clamp(3.5rem, 9vw, 7rem) 0; }
 .notice strong { font-family: var(--display); font-weight: 600; letter-spacing: 0.03em; }
 
 /* ---- reading lists instead of cards ---- */
-.split { background: var(--bg-2); border-block: 1px solid var(--line); }
+.split { background: var(--bg-2); box-shadow: inset 0 1px 0 var(--line), inset 0 -1px 0 var(--line); }
 .two { display: grid; gap: clamp(1.5rem, 4vw, 3rem); }
 @media (min-width: 900px) {
   .two { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
@@ -126,10 +126,18 @@ section { padding: clamp(3.5rem, 9vw, 7rem) 0; }
 }
 .two-head p { color: var(--muted); }
 .rows { margin: 0; }
-.row { display: grid; gap: 0.15rem; padding: 1.1rem 0; border-top: 1px solid var(--line); }
-.row:first-child { border-top: 0; padding-top: 0; }
+.row { display: grid; gap: 0.15rem; }
 .row dt { font: 600 1.3rem/1.2 var(--display); color: var(--gold); }
 .row dd { margin: 0; color: var(--muted); max-width: 60ch; }
+/* the long list becomes a quiet grid without rules; the short one a row of three */
+.rows.grid { display: grid; gap: 1.6rem 2.2rem; }
+@media (min-width: 640px) {
+  .rows.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rows.grid .row:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+.alpha { box-shadow: inset 0 1px 0 var(--line); }
+.rows.inline { display: grid; gap: 1.5rem 2.5rem; margin-top: 1.5rem; }
+@media (min-width: 820px) { .rows.inline { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 /* ---- screenshots: the first and some others run wide ---- */
 .shots { display: grid; gap: 1rem; grid-template-columns: 1fr; margin-top: 2rem; }
@@ -142,6 +150,12 @@ section { padding: clamp(3.5rem, 9vw, 7rem) 0; }
 .community { text-align: center; }
 .community .wrap { display: grid; justify-items: center; }
 .community p { color: var(--muted); }
+
+/* ---- 404 ---- */
+.lost { text-align: center; padding-block: clamp(5rem, 14vw, 9rem); }
+.lost .wrap { display: grid; justify-items: center; }
+.lost h1 { font: 600 clamp(2.2rem, 6vw, 3.6rem)/1.1 var(--display); color: var(--gold); }
+.lost .cta { margin-bottom: 0; }
 
 /* ---- legal pages ---- */
 .prose { max-width: 46rem; padding-block: 4rem 5rem; }

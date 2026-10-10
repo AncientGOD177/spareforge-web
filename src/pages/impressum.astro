@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { NAME, ADDRESS, CONTACT_EMAIL } from '../site';
+---
+<Base title="Legal Notice (Impressum) · SpareForge" description="Legal notice for spareforge.net according to German law.">
+  <div class="wrap prose">
+    <h1>Legal Notice (Impressum)</h1>
+
+    <h2>Provider according to § 5 DDG</h2>
+    <p>
+      {NAME}<br />
+      {ADDRESS.street}<br />
+      {ADDRESS.zip} {ADDRESS.city}<br />
+      {ADDRESS.country}
+    </p>
+
+    <h2>Contact</h2>
+    <p>Email: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+
+    <h2>Responsible for content according to § 18 (2) MStV</h2>
+    <p>{NAME}, address as above.</p>
+
+    <h2>Liability for links</h2>
+    <p>This site links to external websites (for example Discord, TikTok, Instagram). We have no influence on their content and cannot accept liability for it. The respective provider is responsible for the content of linked pages.</p>
+  </div>
+</Base>

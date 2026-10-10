@@ -2,6 +2,8 @@
 export const OPERATOR = 'Ibrahim Ibrahim (SpareForge)';
 export const CONTACT_EMAIL = 'spareforge.dev@gmail.com';
 export const COUNTRY = 'Germany';
+export const NAME = 'Ibrahim Ibrahim';
+export const ADDRESS = { street: 'Scherfederstraße 18', zip: '34414', city: 'Warburg', country: 'Germany' };
 export const UPDATED = '2026-10-09';
 
 export const LINKS = {

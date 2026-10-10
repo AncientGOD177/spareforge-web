@@ -2,28 +2,29 @@
 import Base from '../layouts/Base.astro';
 import { LINKS } from '../site';
 
-const features = [
-  ['6 classes, 12 jobs', 'Start as a Wanderer, pick a class, then master a second job: Vanguard, Sorcerer, Ranger, Luminary, Forgemaster or Shadowblade.'],
-  ['Two kinds of levels', 'Base level up to 150 plus a separate job level. Spend stat points and build the character your way.'],
+// What the game is, as a reading list. Numbers live inside the sentences, not in a stat band.
+const game = [
+  ['Six classes, twelve jobs', 'Start as a Wanderer, choose a class, then master a second job: Vanguard, Sorcerer, Ranger, Luminary, Forgemaster or Shadowblade.'],
+  ['Two kinds of levels', 'Base level up to 150 and a separate job level. Spend stat points and build the character your way.'],
   ['80+ skills', 'Every skill has its own effect, cast time and combo potential.'],
-  ['20 regions', 'Meadows, frozen passes, crystal caves, ashen wastes, sunken ruins and dark catacombs.'],
+  ['Twenty regions', 'Meadows, frozen passes, crystal caves, ashen wastes, sunken ruins and dark catacombs.'],
   ['Bosses and Apex bosses', 'Field bosses, dungeon bosses and Apex fights with unique loot.'],
-  ['Loot in six rarities', 'Rare drops roll random prefixes and suffixes, from Crude to Perfect.'],
+  ['Loot that rolls', 'Six rarities. Rare drops roll random prefixes and suffixes from Crude to Perfect.'],
   ['The forge', 'Refine, repair and reforge your gear until one line is perfect.'],
-  ['Cards, pets and mounts', 'Slot monster cards, let your pet pick up loot, ride from ponies to gryphons.'],
-  ['LAN co-op', 'Play together with up to four players on your home network.'],
+  ['Cards, pets and mounts', 'Slot monster cards, let a pet pick up your loot, ride from ponies to gryphons.'],
+  ['LAN co-op', 'Play with up to four players on your home network.'],
 ];
 
+// Boss shot lives in the hero, so the gallery starts with the rest. `wide` tiles span two columns on large screens.
 const shots = [
-  ['boss_0', 'An Apex boss fight at Skyreach Citadel'],
-  ['town_0', 'Forge Town'],
-  ['combat_knight_0', 'Close-quarters combat'],
-  ['coop_0', 'LAN co-op with friends'],
-  ['worldmap_0', 'The world map'],
-  ['gear_0', 'Gear with random affixes'],
-  ['mount_0', 'Mounts'],
-  ['u_reforge_0', 'The reforge window'],
-  ['creator_0', 'Character creation'],
+  ['town_0', 'Forge Town', true],
+  ['combat_knight_0', 'Close-quarters combat', false],
+  ['coop_0', 'LAN co-op with friends', false],
+  ['worldmap_0', 'The world map', true],
+  ['gear_0', 'Gear with random affixes', false],
+  ['mount_0', 'Mounts', false],
+  ['u_reforge_0', 'The reforge window', false],
+  ['creator_0', 'Character creation', false],
 ];
 
 const store = [
@@ -32,57 +33,51 @@ const store = [
 ].filter(([, href]) => href);
 ---
 <Base>
-  <section class="hero">
-    <img src="/img/boss_0.webp" alt="" width="1280" height="720" fetchpriority="high" />
-    <div class="wrap">
-      <p class="tag">Pixel action RPG · Alpha</p>
-      <h1>SpareForge</h1>
-      <p class="lead">An original action RPG for players who miss the old online RPGs. Real-time combat, a deep job system and loot that keeps you hunting.</p>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-inner">
+      <h1 id="hero-title" class="logo">
+        <img src="/img/logo.webp" alt="SpareForge Alpha" width="942" height="301" fetchpriority="high" />
+      </h1>
+      <p class="lead">A pixel action RPG in the spirit of the classic online RPGs, built from scratch by one person.</p>
       <div class="cta">
-        {store.map(([name, href]) => <a class="btn primary" href={href} rel="noopener">Get it on {name}</a>)}
         <a class="btn primary" href={LINKS.discord} rel="noopener">Join the Discord</a>
+        {store.map(([name, href]) => <a class="btn" href={href} rel="noopener">Get it on {name}</a>)}
         <a class="btn" href="#screens">See the game</a>
       </div>
+      <figure class="window">
+        <img src="/img/boss_0.webp" alt="An Apex boss fight at Skyreach Citadel" width="1280" height="720" />
+      </figure>
     </div>
   </section>
 
-  <div class="alpha-bar" role="note">
-    <strong>Alpha build.</strong> SpareForge is in active development: expect bugs, balance changes and the occasional save reset. Your feedback shapes it.
+  <div class="notice" role="note">
+    <strong>Alpha build.</strong> Expect bugs, balance changes and the occasional save reset. Your feedback shapes the game.
   </div>
 
-  <section>
-    <div class="wrap">
-      <div class="stats" data-reveal>
-        <div><b>12</b><span>jobs</span></div>
-        <div><b>80+</b><span>skills</span></div>
-        <div><b>20</b><span>regions</span></div>
-        <div><b>150</b><span>max level</span></div>
-        <div><b>4</b><span>player co-op</span></div>
+  <section id="game" class="split">
+    <div class="wrap two">
+      <div class="two-head">
+        <h2>Forge your legend</h2>
+        <p>Real-time combat, a deep job system and loot that keeps you hunting. Alone, or with three friends on the same network.</p>
       </div>
-    </div>
-  </section>
-
-  <section id="features" style="padding-top:0">
-    <div class="wrap">
-      <h2 data-reveal>Forge your legend</h2>
-      <div class="grid">
-        {features.map(([title, text]) => (
-          <div class="card" data-reveal>
-            <h3>{title}</h3>
-            <p>{text}</p>
+      <dl class="rows">
+        {game.map(([term, text]) => (
+          <div class="row">
+            <dt>{term}</dt>
+            <dd>{text}</dd>
           </div>
         ))}
-      </div>
+      </dl>
     </div>
   </section>
 
-  <section id="screens" style="padding-top:0">
+  <section id="screens">
     <div class="wrap">
-      <h2 data-reveal>In the game</h2>
+      <h2>In the game</h2>
       <div class="shots">
-        {shots.map(([file, caption], i) => (
-          <figure data-reveal>
-            <img src={`/img/${file}.webp`} alt={caption} width="1280" height="720" loading={i < 3 ? 'eager' : 'lazy'} decoding="async" />
+        {shots.map(([file, caption, wide]) => (
+          <figure class:list={['shot', { wide }]}>
+            <img src={`/img/${file}.webp`} alt={caption} width="1280" height="720" loading="lazy" decoding="async" />
             <figcaption>{caption}</figcaption>
           </figure>
         ))}
@@ -90,30 +85,25 @@ const store = [
     </div>
   </section>
 
-  <section id="status" class="status">
-    <div class="wrap">
-      <h2 data-reveal>Development status</h2>
-      <p data-reveal>SpareForge is in <strong>Alpha</strong> and in active development. Here is what that means today:</p>
-      <ul data-reveal>
-        <li>Single-player and LAN co-op work.</li>
-        <li>Online co-op over Steam is planned before the beta.</li>
-        <li>Keyboard and mouse only for now.</li>
-        <li>In-app purchases are in development and will be added later in the game's life. The alpha has none yet.</li>
-        <li>Alpha means bugs, balance changes and the occasional save reset. Back up your saves.</li>
-      </ul>
+  <section id="alpha" class="split">
+    <div class="wrap two">
+      <div class="two-head">
+        <h2>Where the alpha stands</h2>
+        <p>SpareForge is in active development. This is what works today and what is still planned.</p>
+      </div>
+      <dl class="rows">
+        <div class="row"><dt>Works today</dt><dd>Single-player and LAN co-op, keyboard and mouse.</dd></div>
+        <div class="row"><dt>Planned</dt><dd>Online co-op over Steam before the beta, and in-app purchases later in the game's life. The alpha has none yet.</dd></div>
+        <div class="row"><dt>Back up your saves</dt><dd>Alpha means bugs, balance changes and the occasional save reset.</dd></div>
+      </dl>
     </div>
   </section>
 
-  <section id="community">
+  <section id="community" class="community">
     <div class="wrap">
-      <div class="discord" data-reveal>
-        <div>
-          <p class="tag">Community</p>
-          <h2>Join the forge on Discord</h2>
-          <p>Report bugs, share your builds, vote on what comes next and find a co-op party. Alpha testers get a direct line to the developer.</p>
-        </div>
-        <a class="btn primary" href={LINKS.discord} rel="noopener">Join the Discord</a>
-      </div>
+      <h2>Join the forge on Discord</h2>
+      <p>Report bugs, share your builds, vote on what comes next and find a co-op party.</p>
+      <a class="btn primary" href={LINKS.discord} rel="noopener">Join the Discord</a>
     </div>
   </section>
 </Base>

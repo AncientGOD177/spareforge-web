@@ -1,0 +1,101 @@
+---
+import Prose from '../../layouts/Prose.astro';
+import { NAME, ADDRESS, CONTACT_EMAIL, UPDATED } from '../../site';
+import { ROUTES } from '../../i18n';
+const stand = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(UPDATED));
+---
+<Prose lang="de" route="privacy" title="Datenschutzerklärung · SpareForge" heading="Datenschutzerklärung" kicker="Rechtliches" updated={stand} description="Wie spareforge.net, das Kontaktformular und das Spiel SpareForge mit deinen Daten umgehen.">
+  <p>Diese Erklärung gilt für die Website spareforge.net und das Spiel SpareForge. Sie beschreibt, welche personenbezogenen Daten beim Besuch der Website, bei einer Kontaktaufnahme und beim Zugang zur Alpha verarbeitet werden.</p>
+
+  <h2>1. Verantwortlicher</h2>
+  <address>
+    {NAME}<br />
+    {ADDRESS.street}<br />
+    {ADDRESS.zip} {ADDRESS.city}<br />
+    {ADDRESS.country.de}<br />
+    E-Mail: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+  </address>
+  <p>Ein Datenschutzbeauftragter ist nicht bestellt, weil dafür keine gesetzliche Pflicht besteht.</p>
+
+  <h2>2. Auf einen Blick</h2>
+  <ul>
+    <li>Die Website setzt <strong>keine Cookies</strong> und nutzt <strong>keine Analyse-, Tracking- oder Werbedienste</strong>.</li>
+    <li>Schriften, Bilder, Videos und Skripte liegen auf spareforge.net selbst. Beim Aufruf werden <strong>keine Inhalte von Drittanbietern</strong> geladen, auch keine Google Fonts.</li>
+    <li>Videos werden erst geladen, wenn du auf „Abspielen“ klickst. Sie liegen ebenfalls auf spareforge.net, es gibt keine YouTube-Einbettung.</li>
+    <li>Ein Cookie-Banner ist deshalb nicht nötig.</li>
+  </ul>
+
+  <h2>3. Hosting und Server-Logfiles (GitHub Pages)</h2>
+  <p>Die Website wird über GitHub Pages bereitgestellt. Anbieter ist die GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA, ein Tochterunternehmen der Microsoft Corporation.</p>
+  <p>Bei jedem Aufruf verarbeitet GitHub technisch notwendige Daten, insbesondere deine <strong>IP-Adresse</strong>, Datum und Uhrzeit, die aufgerufene Adresse, den Referrer und die Browserkennung (User-Agent). Das dient der Auslieferung der Seiten sowie der Sicherheit und Stabilität des Dienstes.</p>
+  <ul>
+    <li><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse ist eine sichere und zuverlässige Bereitstellung der Website.</li>
+    <li><strong>Drittlandübermittlung:</strong> Die Daten können in den USA verarbeitet werden. GitHub stützt die Übermittlung nach eigenen Angaben auf das EU-US Data Privacy Framework (Angemessenheitsbeschluss der EU-Kommission vom 10. Juli 2023) und ergänzend auf Standardvertragsklauseln.</li>
+    <li><strong>Speicherdauer:</strong> Die Logfiles werden von GitHub gespeichert. Wir haben keinen Zugriff darauf und können die Dauer nicht beeinflussen; sie richtet sich nach der Datenschutzerklärung von GitHub (<a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub General Privacy Statement</a>).</li>
+  </ul>
+
+  <h2>4. Kontaktformular (Web3Forms)</h2>
+  <p>Für das <a href={ROUTES.contact.de}>Kontaktformular</a> nutzen wir den Dienst Web3Forms (<a href="https://web3forms.com" rel="noopener">web3forms.com</a>). Wenn du das Formular absendest, schickt dein Browser deine Angaben direkt an Web3Forms, das sie per E-Mail an uns weiterleitet. Vorher findet keine Verbindung zu Web3Forms statt.</p>
+  <ul>
+    <li><strong>Daten:</strong> Name, E-Mail-Adresse, Betreff und Nachricht sowie die bei jeder Übertragung anfallenden technischen Daten (IP-Adresse, Zeitpunkt, Browserkennung).</li>
+    <li><strong>Zweck:</strong> Deine Anfrage bearbeiten und beantworten.</li>
+    <li><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO, soweit deine Anfrage auf einen Vertrag oder vorvertragliche Maßnahmen zielt, im Übrigen Art. 6 Abs. 1 lit. f DSGVO (unser berechtigtes Interesse, Anfragen zu beantworten).</li>
+    <li><strong>Drittlandübermittlung:</strong> Web3Forms kann die Daten außerhalb der EU, insbesondere in den USA, verarbeiten. Für die USA besteht ein angemessenes Datenschutzniveau nur bei Anbietern, die nach dem EU-US Data Privacy Framework zertifiziert sind. Ob Web3Forms zertifiziert ist, ist uns nicht bekannt <span class="todo">[…]</span>. Wenn du das nicht möchtest, schreib uns stattdessen direkt eine E-Mail.</li>
+    <li><strong>Speicherdauer:</strong> Wir löschen deine Nachricht, sobald deine Anfrage erledigt ist, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen. Wie lange Web3Forms Daten speichert, richtet sich nach dessen <a href="https://web3forms.com/privacy" rel="noopener">Datenschutzerklärung</a>.</li>
+    <li>Das Formular enthält ein unsichtbares Feld gegen Spam-Bots. Es speichert nichts auf deinem Gerät.</li>
+  </ul>
+
+  <h2>5. Kontakt per E-Mail</h2>
+  <p>Wenn du uns eine E-Mail schreibst, verarbeiten wir deine E-Mail-Adresse und den Inhalt deiner Nachricht, um dir zu antworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b bzw. lit. f DSGVO. Unser Postfach liegt bei Gmail, Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland; dabei kann eine Übermittlung in die USA stattfinden, die Google auf das EU-US Data Privacy Framework stützt. Auch E-Mails löschen wir, sobald die Anfrage erledigt ist und keine Aufbewahrungspflichten bestehen. Das gilt ebenso für Nachrichten, die über das Kontaktformular bei uns eingehen.</p>
+
+  <h2>6. Lokaler Speicher (localStorage), keine Cookies</h2>
+  <p>Die Website speichert nur dann etwas auf deinem Gerät, wenn du selbst eine Einstellung wählst. Bis dahin bleibt der Speicher leer.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Schlüssel</th><th>Wann</th><th>Inhalt und Zweck</th></tr></thead>
+      <tbody>
+        <tr><td><code>sf:motion</code></td><td>Du nutzt den Schalter „Bewegung reduzieren“ in der Fußzeile.</td><td><code>reduce</code> oder <code>full</code>: merkt sich, ob Videos, Funken und Einblendungen laufen sollen.</td></tr>
+        <tr><td><code>sf:ribbon</code></td><td>Du blendest den Alpha-Hinweis oben aus.</td><td>Die Versionsnummer, damit der Hinweis bis zum nächsten Build ausgeblendet bleibt.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Diese Einträge werden nur auf deinem Gerät gespeichert und nicht an uns übertragen. Das Speichern ist für den von dir ausdrücklich gewünschten Dienst unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Die Einträge bleiben, bis du sie in deinem Browser löschst.</p>
+
+  <h2>7. Links zu anderen Diensten</h2>
+  <p>Wir verlinken auf Discord, TikTok, Instagram, YouTube und itch.io. Das sind einfache Links, keine Einbettungen: Erst wenn du einen Link anklickst, verbindet sich dein Browser mit dem jeweiligen Anbieter, der dann nach seiner eigenen Datenschutzerklärung verantwortlich ist. Auf unseren Profilen dort sehen wir nur, was jedes Konto sieht, zum Beispiel Aufrufzahlen.</p>
+
+  <h2>8. Alpha-Zugang über Discord und itch.io</h2>
+  <p>Den Alpha-Key bekommst du über unseren Discord-Server. Anbieter ist die Discord Inc., 444 De Haro Street, Suite 200, San Francisco, CA 94107, USA. Wenn du dich mit <code>/apply</code> oder „Tester werden“ bewirbst, sehen die Server-Admins deinen Discord-Namen und deine Bewerbung. Wirst du angenommen, schickt dir der SpareForge-Bot einen persönlichen itch.io-Key per Direktnachricht.</p>
+  <ul>
+    <li><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (du möchtest am Alpha-Test teilnehmen).</li>
+    <li><strong>Was gespeichert wird:</strong> Welche Daten der Bot zu einer Bewerbung und zum vergebenen Key festhält und wie lange, wird hier ergänzt <span class="todo">[…]</span>.</li>
+    <li>Zum Einlösen des Keys meldest du dich bei itch.io an (Itch Corp, USA). Dort gilt die Datenschutzerklärung von itch.io.</li>
+    <li>Discord und itch.io verarbeiten Daten auch in den USA und sind dafür nach eigener Datenschutzerklärung verantwortlich.</li>
+  </ul>
+
+  <h2>9. Das Spiel</h2>
+  <ul>
+    <li>SpareForge ist ein Einzelspieler-Spiel mit LAN-Koop und braucht kein Konto.</li>
+    <li>Spielstände bleiben auf deinem Computer. Das Spiel sendet sie nicht an uns.</li>
+    <li>Der LAN-Koop verbindet Computer in deinem eigenen Netzwerk. Der Datenverkehr läuft nicht über unsere Server.</li>
+    <li>Updates kommen über die itch-App oder einen Download aus deiner itch.io-Bibliothek; dabei gilt die Datenschutzerklärung von itch.io.</li>
+  </ul>
+  <p>Sobald das Spiel Online-Funktionen bekommt (zum Beispiel Online-Koop über Steam), wird diese Erklärung vorher ergänzt.</p>
+
+  <h2>10. Deine Rechte</h2>
+  <p>Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21). Eine erteilte Einwilligung kannst du jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3). Schreib dazu einfach an <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+  <p>Du kannst dich außerdem bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO). Für uns zuständig ist:</p>
+  <address>
+    Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen<br />
+    Kavalleriestraße 2–4<br />
+    40213 Düsseldorf
+  </address>
+
+  <h2>11. Pflicht zur Bereitstellung, automatisierte Entscheidungen</h2>
+  <p>Du bist nicht verpflichtet, uns Daten zu geben. Ohne die technischen Verbindungsdaten lässt sich die Website aber nicht ausliefern, und ohne Kontaktangaben können wir nicht antworten. Eine automatisierte Entscheidungsfindung oder Profilbildung findet nicht statt.</p>
+
+  <h2>12. Änderungen</h2>
+  <p>Wenn sich die Website oder das Spiel ändert, passen wir diese Erklärung an. Es gilt die jeweils hier veröffentlichte Fassung mit dem oben genannten Stand.</p>
+
+  <p class="note">English version: <a href={ROUTES.privacy.en}>Privacy policy</a>.</p>
+</Prose>

@@ -1,39 +1,100 @@
 ---
-import Base from '../layouts/Base.astro';
-import { OPERATOR, CONTACT_EMAIL, COUNTRY, UPDATED } from '../site';
+import Prose from '../layouts/Prose.astro';
+import { NAME, ADDRESS, CONTACT_EMAIL, UPDATED } from '../site';
+import { ROUTES } from '../i18n';
+const updated = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(UPDATED));
 ---
-<Base title="Privacy Policy · SpareForge" description="How spareforge.net and the SpareForge game handle your data.">
-  <div class="wrap prose">
-    <h1>Privacy Policy</h1>
-    <p class="note">Last updated: {UPDATED}</p>
+<Prose lang="en" route="privacy" title="Privacy Policy · SpareForge" heading="Privacy Policy" kicker="Legal" updated={updated} description="How spareforge.net, the contact form and the game SpareForge handle your data.">
+  <p class="note">This is an English translation for convenience. The <a href={ROUTES.privacy.de}>German Datenschutzerklärung</a> is the legally binding version.</p>
+  <p>This policy covers the website spareforge.net and the game SpareForge. It explains which personal data is processed when you visit the site, contact us, or join the alpha.</p>
 
-    <p>This policy covers the website spareforge.net and the game SpareForge. The operator is {OPERATOR}, {COUNTRY}. Contact: {CONTACT_EMAIL}.</p>
+  <h2>1. Controller</h2>
+  <address>
+    {NAME}<br />
+    {ADDRESS.street}<br />
+    {ADDRESS.zip} {ADDRESS.city}<br />
+    {ADDRESS.country.en}<br />
+    Email: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+  </address>
+  <p>No data protection officer is appointed, because there is no legal obligation to do so.</p>
 
-    <h2>The website</h2>
-    <ul>
-      <li>The site does not use cookies, analytics, advertising or tracking scripts.</li>
-      <li>It loads no fonts, scripts or images from other companies. All files come from spareforge.net.</li>
-      <li>There are no accounts, forms or comment fields, so we do not collect personal information through the site.</li>
-      <li>Our hosting provider may keep standard server logs (for example IP address, time and requested page) for security and operations. We do not use them to identify visitors.</li>
-    </ul>
+  <h2>2. At a glance</h2>
+  <ul>
+    <li>The site sets <strong>no cookies</strong> and uses <strong>no analytics, tracking or advertising</strong>.</li>
+    <li>Fonts, images, videos and scripts are served from spareforge.net itself. <strong>Nothing is loaded from third parties</strong> when you open a page, including no Google Fonts.</li>
+    <li>Videos load only after you press play. They are also hosted on spareforge.net; there is no YouTube embed.</li>
+    <li>That is why there is no cookie banner.</li>
+  </ul>
 
-    <h2>The game</h2>
-    <ul>
-      <li>SpareForge is a single-player game with LAN co-op. It does not require an account.</li>
-      <li>Save files stay on your own computer. The game does not send them to us.</li>
-      <li>LAN co-op connects computers on your own network. Traffic does not go through our servers.</li>
-    </ul>
+  <h2>3. Hosting and server logs (GitHub Pages)</h2>
+  <p>The site is served by GitHub Pages, provided by GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA, a subsidiary of Microsoft Corporation.</p>
+  <p>On every request GitHub processes technically necessary data, in particular your <strong>IP address</strong>, date and time, the requested address, the referrer and your browser's user agent, to deliver the pages and keep the service secure and stable.</p>
+  <ul>
+    <li><strong>Legal basis:</strong> Art. 6(1)(f) GDPR, our legitimate interest in a secure and reliable website.</li>
+    <li><strong>Transfer to a third country:</strong> the data may be processed in the USA. According to GitHub, transfers rely on the EU-US Data Privacy Framework (European Commission adequacy decision of 10 July 2023), with standard contractual clauses as a fallback.</li>
+    <li><strong>Retention:</strong> GitHub stores these logs. We have no access to them and cannot set the retention period; see the <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub General Privacy Statement</a>.</li>
+  </ul>
 
-    <h2>Social media</h2>
-    <p>We publish game videos and posts on TikTok and Instagram. Those platforms process data under their own privacy policies when you watch or interact with our posts. We only receive the statistics the platforms show to every account holder, such as view counts.</p>
+  <h2>4. Contact form (Web3Forms)</h2>
+  <p>The <a href={ROUTES.contact.en}>contact form</a> uses the Web3Forms service (<a href="https://web3forms.com" rel="noopener">web3forms.com</a>). When you submit the form, your browser sends your entries directly to Web3Forms, which forwards them to us by email. There is no connection to Web3Forms before you submit.</p>
+  <ul>
+    <li><strong>Data:</strong> name, email address, subject and message, plus the technical data of every transfer (IP address, time, user agent).</li>
+    <li><strong>Purpose:</strong> handling and answering your request.</li>
+    <li><strong>Legal basis:</strong> Art. 6(1)(b) GDPR where your request aims at a contract or pre-contractual steps, otherwise Art. 6(1)(f) GDPR (our legitimate interest in answering requests).</li>
+    <li><strong>Transfer to a third country:</strong> Web3Forms may process the data outside the EU, in particular in the USA. The USA only offers an adequate level of protection for companies certified under the EU-US Data Privacy Framework. We do not know whether Web3Forms is certified <span class="todo">[…]</span>. If you prefer, write to us by email instead.</li>
+    <li><strong>Retention:</strong> we delete your message once your request is settled, unless statutory retention duties apply. Web3Forms' retention follows its <a href="https://web3forms.com/privacy" rel="noopener">privacy policy</a>.</li>
+    <li>The form contains a hidden field that catches spam bots. It stores nothing on your device.</li>
+  </ul>
 
-    <h2>Discord</h2>
-    <p>The site links to our Discord server. If you join, Discord processes your data under its own privacy policy. We see what every server admin sees, such as your username and the messages you post in the server.</p>
+  <h2>5. Contact by email</h2>
+  <p>If you email us, we process your address and your message to reply (Art. 6(1)(b) or (f) GDPR). Our mailbox is hosted by Gmail, provided by Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland; data may be transferred to the USA, which Google bases on the EU-US Data Privacy Framework. We delete emails, including messages that arrive through the contact form, once the matter is settled and no retention duties apply.</p>
 
-    <h2>Your rights</h2>
-    <p>Because we do not collect personal information on this site, there is normally nothing to access or delete. If you wrote to us by email, you can ask us to delete that correspondence at any time at {CONTACT_EMAIL}.</p>
-
-    <h2>Changes</h2>
-    <p>If we change this policy, the new version appears on this page with a new date.</p>
+  <h2>6. Local storage, no cookies</h2>
+  <p>The site only stores something on your device when you choose a setting yourself. Until then, storage stays empty.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Key</th><th>When</th><th>Content and purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>sf:motion</code></td><td>You use the "Reduce motion" switch in the footer.</td><td><code>reduce</code> or <code>full</code>: remembers whether videos, embers and reveals should run.</td></tr>
+        <tr><td><code>sf:ribbon</code></td><td>You hide the alpha notice at the top.</td><td>The build number, so the notice stays hidden until the next build.</td></tr>
+      </tbody>
+    </table>
   </div>
-</Base>
+  <p>These entries stay on your device and are never sent to us. Storing them is strictly necessary for the function you explicitly asked for (§ 25(2) no. 2 TDDDG). They remain until you clear them in your browser.</p>
+
+  <h2>7. Links to other services</h2>
+  <p>We link to Discord, TikTok, Instagram, YouTube and itch.io. These are plain links, not embeds: your browser only connects to a provider when you click, and that provider is then responsible under its own privacy policy. On our profiles there, we only see what every account holder sees, such as view counts.</p>
+
+  <h2>8. Alpha access through Discord and itch.io</h2>
+  <p>Alpha keys are handed out on our Discord server, provided by Discord Inc., 444 De Haro Street, Suite 200, San Francisco, CA 94107, USA. When you apply with <code>/apply</code> or "Become a tester", the server admins see your Discord name and your application. If you are accepted, the SpareForge bot sends you a personal itch.io key by direct message.</p>
+  <ul>
+    <li><strong>Legal basis:</strong> Art. 6(1)(b) GDPR (you want to take part in the alpha test).</li>
+    <li><strong>What is stored:</strong> which data the bot keeps about an application and the issued key, and for how long, will be added here <span class="todo">[…]</span>.</li>
+    <li>To redeem the key you sign in to itch.io (Itch Corp, USA), whose privacy policy applies there.</li>
+    <li>Discord and itch.io also process data in the USA and are responsible for that under their own policies.</li>
+  </ul>
+
+  <h2>9. The game</h2>
+  <ul>
+    <li>SpareForge is a single-player game with LAN co-op. It does not require an account.</li>
+    <li>Save files stay on your own computer. The game does not send them to us.</li>
+    <li>LAN co-op connects computers on your own network. Traffic does not go through our servers.</li>
+    <li>Updates come through the itch app or a download from your itch.io library, where itch.io's privacy policy applies.</li>
+  </ul>
+  <p>Before the game gets any online feature (for example online co-op over Steam), this policy will be updated.</p>
+
+  <h2>10. Your rights</h2>
+  <p>You have the right of access (Art. 15 GDPR), rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18), data portability (Art. 20) and to object to processing based on Art. 6(1)(f) GDPR (Art. 21). You can withdraw any consent at any time with effect for the future (Art. 7(3)). Just write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+  <p>You may also lodge a complaint with a data protection supervisory authority (Art. 77 GDPR). The authority responsible for us is:</p>
+  <address>
+    Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen<br />
+    Kavalleriestraße 2–4<br />
+    40213 Düsseldorf, Germany
+  </address>
+
+  <h2>11. No obligation, no automated decisions</h2>
+  <p>You are not obliged to provide data. Without the technical connection data the site cannot be delivered, and without contact details we cannot reply. There is no automated decision-making or profiling.</p>
+
+  <h2>12. Changes</h2>
+  <p>When the site or the game changes, we update this policy. The version published here, with the date above, applies.</p>
+</Prose>

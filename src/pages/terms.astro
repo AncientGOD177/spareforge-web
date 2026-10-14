@@ -1,28 +1,43 @@
 ---
-import Base from '../layouts/Base.astro';
+import Prose from '../layouts/Prose.astro';
 import { OPERATOR, CONTACT_EMAIL, UPDATED } from '../site';
+import { ROUTES } from '../i18n';
+const updated = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(UPDATED));
 ---
-<Base title="Terms of Service · SpareForge" description="Terms for using spareforge.net and the SpareForge game.">
-  <div class="wrap prose">
-    <h1>Terms of Service</h1>
-    <p class="note">Last updated: {UPDATED}</p>
+<Prose lang="en" route="terms" title="Terms of Use · SpareForge" heading="Terms of Use" kicker="Legal" updated={updated} description="Terms for using spareforge.net and the free SpareForge alpha.">
+  <p class="note">English translation for convenience. The <a href={ROUTES.terms.de}>German Nutzungsbedingungen</a> are the binding version.</p>
+  <p>These terms apply to spareforge.net and to the game SpareForge, provided by {OPERATOR} (see the <a href={ROUTES.impressum.en}>legal notice</a>). By using the site or the game you agree to them.</p>
 
-    <p>These terms apply to spareforge.net and to the game SpareForge, operated by {OPERATOR}. By using the site or the game you agree to them.</p>
+  <h2>1. The website</h2>
+  <p>The site informs you about the game. Please do not misuse it, try to disrupt it, or access it in automated ways that put load on it. The contact form is for genuine requests only.</p>
 
-    <h2>Use of the site</h2>
-    <p>The site is provided for information about the game. Please do not misuse it, try to disrupt it or access it in automated ways that put load on it.</p>
+  <h2>2. Alpha access</h2>
+  <ul>
+    <li>The alpha is <strong>free</strong>. Access is given through a personal itch.io key that you can request on our Discord server. There is no right to receive a key, and staff decide on applications.</li>
+    <li>Keys are personal. Please do not share, trade or sell them. A key that is passed on or misused can be revoked.</li>
+    <li>The game is installed and updated through itch.io; the terms of itch.io and Discord apply to their services.</li>
+  </ul>
 
-    <h2>The game</h2>
-    <ul>
-      <li>SpareForge is in Alpha. It can contain bugs, change between versions and lose progress. Back up your save files if they matter to you.</li>
-      <li>Unless a separate license says otherwise, you may play the game for personal, non-commercial use.</li>
-      <li>You may not resell, redistribute or reverse engineer the game or its assets.</li>
-    </ul>
+  <h2>3. Alpha status</h2>
+  <ul>
+    <li>SpareForge is in <strong>alpha</strong>. It can contain bugs, can change between versions, and progress can be lost or reset. Back up your save files if they matter to you.</li>
+    <li>Features described as planned (for example online co-op over Steam, a Steam release, or in-app purchases) are not part of the alpha and may change or never ship.</li>
+    <li>We may change, pause or end the alpha at any time.</li>
+  </ul>
 
-    <h2>Content</h2>
-    <p>The text, pixel art, music and other assets on this site and in the game belong to {OPERATOR} unless marked otherwise. You may share screenshots and videos of the game, including on social media and in streams.</p>
+  <h2>4. What you may do</h2>
+  <ul>
+    <li>Unless a separate licence says otherwise, you may play the game for personal, non-commercial use.</li>
+    <li>You may not resell, redistribute or reverse engineer the game or its assets.</li>
+    <li>You may share screenshots and videos of the game, including on social media and in streams.</li>
+  </ul>
 
-    <h2>Changes and contact</h2>
-    <p>We may update these terms. The current version is always on this page. Questions: {CONTACT_EMAIL}.</p>
-  </div>
-</Base>
+  <h2>5. Content</h2>
+  <p>The text, pixel art, music and other assets on this site and in the game belong to {OPERATOR} unless marked otherwise.</p>
+
+  <h2>6. Liability</h2>
+  <p>The alpha is provided free of charge. We are liable for intent and gross negligence. Liability for injury to life, body or health and liability under the German Product Liability Act remain unaffected. Otherwise, liability for the free alpha is excluded to the extent permitted by law.</p>
+
+  <h2>7. Changes, law and contact</h2>
+  <p>We may update these terms; the current version is always on this page. German law applies; mandatory consumer protection rules of your country of residence remain unaffected. Questions: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> or the <a href={ROUTES.contact.en}>contact form</a>.</p>
+</Prose>

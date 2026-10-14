@@ -1,0 +1,157 @@
+---
+import { WEB3FORMS_KEY, WEB3FORMS_ENDPOINT, CONTACT_EMAIL } from '../site';
+import { ROUTES, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const de = lang === 'de';
+const t = de
+  ? {
+      name: 'Name', email: 'E-Mail', subject: 'Betreff', message: 'Nachricht', send: 'Nachricht senden', sending: 'Wird gesendet …',
+      topics: ['Frage zum Spiel', 'Fehlermeldung', 'Presse', 'Rechtliches / Datenschutz', 'Sonstiges'],
+      required: 'Pflichtfeld', privacy: 'Beim Absenden gehen deine Angaben über den Dienst Web3Forms an uns. Mehr dazu in der',
+      privacyLink: 'Datenschutzerklärung', ok: 'Danke! Deine Nachricht ist angekommen. Wir melden uns per E-Mail.',
+      fail: 'Das hat nicht geklappt. Bitte schreib uns direkt an', invalid: 'Bitte prüfe die markierten Felder.',
+      errName: 'Bitte gib deinen Namen an.', errEmail: 'Bitte gib eine gültige E-Mail-Adresse an.', errMsg: 'Bitte schreib mindestens 10 Zeichen.',
+      fallbackTitle: 'Schreib uns eine E-Mail', fallbackText: 'Das Kontaktformular ist gerade nicht verfügbar. Du erreichst uns direkt per E-Mail:',
+      or: 'Lieber per E-Mail?', bot: 'Nicht ausfüllen',
+      redirect: 'https://spareforge.net/de/kontakt',
+    }
+  : {
+      name: 'Name', email: 'Email', subject: 'Subject', message: 'Message', send: 'Send message', sending: 'Sending …',
+      topics: ['Question about the game', 'Bug report', 'Press', 'Legal / privacy', 'Something else'],
+      required: 'required', privacy: 'When you send the form, your entries reach us through the Web3Forms service. Details in the',
+      privacyLink: 'privacy policy', ok: 'Thanks! Your message has arrived. We will reply by email.',
+      fail: 'That did not work. Please write to us directly at', invalid: 'Please check the marked fields.',
+      errName: 'Please enter your name.', errEmail: 'Please enter a valid email address.', errMsg: 'Please write at least 10 characters.',
+      fallbackTitle: 'Write us an email', fallbackText: 'The contact form is not available right now. You can reach us directly by email:',
+      or: 'Prefer email?', bot: 'Leave this empty',
+      redirect: 'https://spareforge.net/contact',
+    };
+const hasKey = WEB3FORMS_KEY.trim().length > 0;
+---
+{hasKey ? (
+  <form class="c-form" method="POST" action={WEB3FORMS_ENDPOINT} novalidate data-contact data-endpoint={WEB3FORMS_ENDPOINT}>
+    <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+    <input type="hidden" name="from_name" value="spareforge.net" />
+    <input type="hidden" name="redirect" value={t.redirect} />
+    <!-- Honeypot: real visitors never see or fill this; Web3Forms drops submissions where it is checked. -->
+    <div class="c-form__hp" aria-hidden="true">
+      <label>{t.bot}<input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <div class="c-form__row">
+      <div class="c-field">
+        <label for="cf-name">{t.name} <span class="c-field__req">({t.required})</span></label>
+        <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="120" aria-describedby="cf-name-err" />
+        <p class="c-field__err" id="cf-name-err" data-err={t.errName}></p>
+      </div>
+      <div class="c-field">
+        <label for="cf-email">{t.email} <span class="c-field__req">({t.required})</span></label>
+        <input id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="200" aria-describedby="cf-email-err" />
+        <p class="c-field__err" id="cf-email-err" data-err={t.errEmail}></p>
+      </div>
+    </div>
+    <div class="c-field">
+      <label for="cf-subject">{t.subject}</label>
+      <select id="cf-subject" name="subject">
+        {t.topics.map((o) => <option value={`SpareForge: ${o}`}>{o}</option>)}
+      </select>
+    </div>
+    <div class="c-field">
+      <label for="cf-message">{t.message} <span class="c-field__req">({t.required})</span></label>
+      <textarea id="cf-message" name="message" rows="7" required minlength="10" maxlength="5000" aria-describedby="cf-message-err"></textarea>
+      <p class="c-field__err" id="cf-message-err" data-err={t.errMsg}></p>
+    </div>
+    <p class="c-form__privacy">{t.privacy} <a href={ROUTES.privacy[lang]}>{t.privacyLink}</a>.</p>
+    <div class="c-form__actions">
+      <button class="p-btn p-btn--gold" type="submit" data-label={t.send} data-sending={t.sending}>{t.send}</button>
+      <p class="c-form__alt">{t.or} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+    </div>
+    <p class="c-form__status" role="status" aria-live="polite" data-status data-ok={t.ok} data-fail={`${t.fail} ${CONTACT_EMAIL}.`} data-invalid={t.invalid}></p>
+  </form>
+) : (
+  <div class="c-form c-form--fallback" data-contact-fallback>
+    <h2 class="c-form__fb-title">{t.fallbackTitle}</h2>
+    <p>{t.fallbackText}</p>
+    <a class="p-btn p-btn--gold" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+  </div>
+)}
+
+<style>
+  .c-form { display: grid; gap: var(--sp-5); padding: var(--sp-6); background: var(--night-800); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold-600), 0 0 0 6px var(--ink); }
+  .c-form__row { display: grid; gap: var(--sp-5); }
+  @media (min-width: 40rem) { .c-form__row { grid-template-columns: 1fr 1fr; } }
+  .c-field { display: grid; gap: 8px; }
+  .c-field label { font: 700 1rem/1.2 var(--font-display); color: var(--gold-100); }
+  .c-field__req { font: 400 0.7rem/1 var(--font-chip); color: var(--faint); text-transform: uppercase; letter-spacing: 0.06em; }
+  .c-field input, .c-field select, .c-field textarea {
+    width: 100%; min-height: 48px; padding: 10px 14px; font: inherit; font-size: 1rem; color: var(--text);
+    background: var(--night-950); border: 0; border-radius: 0;
+    box-shadow: inset 0 0 0 2px var(--night-600), 0 0 0 2px var(--ink);
+    transition: box-shadow var(--t-micro) var(--ease-out);
+  }
+  .c-field textarea { resize: vertical; min-height: 160px; }
+  .c-field input:focus-visible, .c-field select:focus-visible, .c-field textarea:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--gold-300), 0 0 0 2px var(--ink), 0 0 0 5px rgb(255 201 60 / 0.25); }
+  .c-field [aria-invalid='true'] { box-shadow: inset 0 0 0 2px var(--alpha-500), 0 0 0 2px var(--ink); }
+  .c-field__err { margin: 0; min-height: 1.2em; color: var(--ember-300); font-size: var(--fs-sm); }
+  .c-field__err:empty { min-height: 0; }
+  .c-form__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .c-form__privacy { margin: 0; color: var(--faint); font-size: var(--fs-sm); }
+  .c-form__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4) var(--sp-5); }
+  .c-form__alt { margin: 0; color: var(--muted); }
+  .c-form__status { margin: 0; font-weight: 700; }
+  .c-form__status.is-ok { color: var(--refine-10c); }
+  .c-form__status.is-err { color: var(--ember-300); }
+  .c-form { position: relative; }
+  .c-form--fallback { justify-items: start; }
+  .c-form__fb-title { font: 700 var(--fs-xl)/1.2 var(--font-display); color: var(--gold-100); }
+  .c-form--fallback p { margin: 0; color: var(--muted); }
+</style>
+
+<script>
+  // Client-side validation and an in-page submit via fetch. Without JS the form posts normally
+  // to Web3Forms, which redirects back here. Nothing is sent until the visitor presses submit.
+  const form = document.querySelector<HTMLFormElement>('[data-contact]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input[required], textarea[required]')];
+
+    const check = (f: HTMLInputElement | HTMLTextAreaElement) => {
+      const err = document.getElementById(f.getAttribute('aria-describedby')!)!;
+      const v = f.value.trim();
+      const ok = f.type === 'email' ? /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) : f.tagName === 'TEXTAREA' ? v.length >= 10 : v.length > 0;
+      f.setAttribute('aria-invalid', String(!ok));
+      err.textContent = ok ? '' : err.dataset.err!;
+      return ok;
+    };
+    fields.forEach((f) => f.addEventListener('blur', () => { if (f.value) check(f); }));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.className = 'c-form__status'; status.textContent = '';
+      const results = fields.map(check);
+      if (results.includes(false)) {
+        status.classList.add('is-err'); status.textContent = status.dataset.invalid!;
+        fields[results.indexOf(false)].focus();
+        return;
+      }
+      const data = Object.fromEntries(new FormData(form));
+      if (data.botcheck) return; // honeypot ticked: silently drop
+      delete (data as Record<string, unknown>).redirect;
+      btn.disabled = true; btn.textContent = btn.dataset.sending!;
+      try {
+        const res = await fetch(form.dataset.endpoint!, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || json.success === false) throw new Error('send failed');
+        form.reset();
+        status.classList.add('is-ok'); status.textContent = status.dataset.ok!;
+      } catch {
+        status.classList.add('is-err'); status.textContent = status.dataset.fail!;
+      } finally {
+        btn.disabled = false; btn.textContent = btn.dataset.label!;
+      }
+    });
+  }
+</script>

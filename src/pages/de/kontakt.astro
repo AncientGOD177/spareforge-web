@@ -1,0 +1,21 @@
+---
+import Prose from '../../layouts/Prose.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { LINKS, CONTACT_EMAIL } from '../../site';
+---
+<Prose lang="de" route="contact" title="Kontakt · SpareForge" heading="Kontakt" kicker="Schreib uns" description="Kontakt zum SpareForge-Entwickler per Formular oder E-Mail.">
+  <p>Fragen zum Spiel, Presseanfragen oder Rechtliches: Nutze das Formular oder schreib an <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Fehlermeldungen und Alpha-Keys laufen am schnellsten über den Discord-Server.</p>
+  <ContactForm lang="de" />
+  <aside slot="aside" class="c-aside">
+    <h2>Fehler und Alpha-Keys</h2>
+    <p>Fehlermeldungen, Feedback und Alpha-Keys laufen über Discord, wo die ganze Testergruppe Probleme sehen und bestätigen kann.</p>
+    <a class="p-btn p-btn--game p-btn--sm" href={LINKS.discord} rel="noopener">Discord beitreten</a>
+    <p class="c-aside__warn">Schick deinen itch.io-Key nie per E-Mail und poste ihn nie öffentlich.</p>
+  </aside>
+</Prose>
+<style>
+  .c-aside { display: grid; gap: var(--sp-3); justify-items: start; padding: var(--sp-5); background: var(--night-900); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink); }
+  .c-aside h2 { font: 700 var(--fs-lg)/1.2 var(--font-display); color: var(--gold-100); }
+  .c-aside p { margin: 0; color: var(--muted); }
+  .c-aside__warn { font-size: var(--fs-sm); color: var(--ember-300) !important; }
+</style>

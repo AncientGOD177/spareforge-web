@@ -1,0 +1,26 @@
+---
+import Prose from '../../layouts/Prose.astro';
+import { NAME, ADDRESS, CONTACT_EMAIL } from '../../site';
+import { ROUTES } from '../../i18n';
+---
+<Prose lang="de" route="impressum" title="Impressum · SpareForge" heading="Impressum" kicker="Rechtliches" description="Impressum von spareforge.net nach § 5 DDG und § 18 Abs. 2 MStV.">
+  <h2>Anbieter nach § 5 DDG</h2>
+  <address>
+    {NAME}<br />
+    {ADDRESS.street}<br />
+    {ADDRESS.zip} {ADDRESS.city}<br />
+    {ADDRESS.country.de}
+  </address>
+
+  <h2>Kontakt</h2>
+  <p>E-Mail: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><br />
+  Kontaktformular: <a href={ROUTES.contact.de}>spareforge.net/de/kontakt</a></p>
+
+  <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+  <p>{NAME}, Anschrift wie oben.</p>
+
+  <h2>Haftung für Links</h2>
+  <p>Diese Website verlinkt auf externe Websites (zum Beispiel Discord, TikTok, Instagram, YouTube und itch.io). Auf deren Inhalte haben wir keinen Einfluss und können dafür keine Haftung übernehmen. Für die Inhalte verlinkter Seiten ist der jeweilige Anbieter verantwortlich.</p>
+
+  <p class="note">English version: <a href={ROUTES.impressum.en}>Legal notice</a>.</p>
+</Prose>

@@ -1,0 +1,44 @@
+---
+import Prose from '../../layouts/Prose.astro';
+import { OPERATOR, CONTACT_EMAIL, UPDATED } from '../../site';
+import { ROUTES } from '../../i18n';
+const stand = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(UPDATED));
+---
+<Prose lang="de" route="terms" title="Nutzungsbedingungen · SpareForge" heading="Nutzungsbedingungen" kicker="Rechtliches" updated={stand} description="Bedingungen für die Nutzung von spareforge.net und der kostenlosen SpareForge-Alpha.">
+  <p>Diese Bedingungen gelten für spareforge.net und das Spiel SpareForge, angeboten von {OPERATOR} (siehe <a href={ROUTES.impressum.de}>Impressum</a>). Mit der Nutzung der Website oder des Spiels stimmst du ihnen zu.</p>
+
+  <h2>1. Die Website</h2>
+  <p>Die Website informiert über das Spiel. Bitte missbrauche sie nicht, störe sie nicht und rufe sie nicht automatisiert in einer Weise ab, die sie belastet. Das Kontaktformular ist nur für echte Anfragen gedacht.</p>
+
+  <h2>2. Alpha-Zugang</h2>
+  <ul>
+    <li>Die Alpha ist <strong>kostenlos</strong>. Der Zugang erfolgt über einen persönlichen itch.io-Key, den du auf unserem Discord-Server anfragen kannst. Ein Anspruch auf einen Key besteht nicht; über Bewerbungen entscheidet das Team.</li>
+    <li>Keys sind persönlich. Bitte gib sie nicht weiter, tausche oder verkaufe sie nicht. Weitergegebene oder missbrauchte Keys können gesperrt werden.</li>
+    <li>Installation und Updates laufen über itch.io; für deren Dienste gelten die Bedingungen von itch.io und Discord.</li>
+  </ul>
+
+  <h2>3. Alpha-Status</h2>
+  <ul>
+    <li>SpareForge ist eine <strong>Alpha</strong>. Das Spiel kann Fehler enthalten, sich zwischen Versionen ändern, und Fortschritt kann verloren gehen oder zurückgesetzt werden. Sichere deine Spielstände, wenn sie dir wichtig sind.</li>
+    <li>Als geplant beschriebene Funktionen (zum Beispiel Online-Koop über Steam, ein Steam-Release oder In-App-Käufe) sind nicht Teil der Alpha und können sich ändern oder ausbleiben.</li>
+    <li>Wir können die Alpha jederzeit ändern, pausieren oder beenden.</li>
+  </ul>
+
+  <h2>4. Was du darfst</h2>
+  <ul>
+    <li>Soweit keine gesonderte Lizenz etwas anderes bestimmt, darfst du das Spiel privat und nicht kommerziell spielen.</li>
+    <li>Du darfst das Spiel und seine Inhalte nicht weiterverkaufen, weiterverbreiten oder zurückentwickeln (Reverse Engineering).</li>
+    <li>Screenshots und Videos des Spiels darfst du teilen, auch in sozialen Medien und Streams.</li>
+  </ul>
+
+  <h2>5. Inhalte</h2>
+  <p>Texte, Pixel-Art, Musik und andere Inhalte dieser Website und des Spiels gehören {OPERATOR}, soweit nicht anders gekennzeichnet.</p>
+
+  <h2>6. Haftung</h2>
+  <p>Die Alpha wird unentgeltlich bereitgestellt. Wir haften für Vorsatz und grobe Fahrlässigkeit. Die Haftung für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit sowie nach dem Produkthaftungsgesetz bleibt unberührt. Im Übrigen ist die Haftung für die kostenlose Alpha ausgeschlossen, soweit gesetzlich zulässig.</p>
+
+  <h2>7. Änderungen, Recht und Kontakt</h2>
+  <p>Wir können diese Bedingungen anpassen; die aktuelle Fassung steht immer auf dieser Seite. Es gilt deutsches Recht; zwingende Verbraucherschutzvorschriften deines Wohnsitzlandes bleiben unberührt. Fragen: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> oder über das <a href={ROUTES.contact.de}>Kontaktformular</a>.</p>
+
+  <p class="note">English version: <a href={ROUTES.terms.en}>Terms of use</a>.</p>
+</Prose>

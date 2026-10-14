@@ -28,7 +28,8 @@ export function homeGraph(lang: Lang, posters: Record<string, string>) {
       {
         '@type': 'Organization', '@id': `${SITE}/#org`, name: 'SpareForge', url: `${SITE}/`,
         logo: abs('/icon-512.png'),
-        sameAs: [LINKS.itch, LINKS.discord, LINKS.youtube, LINKS.tiktok, LINKS.instagram, LINKS.steam].filter(Boolean),
+        // The key-only itch page is deliberately not listed (the site never points to a download).
+        sameAs: [LINKS.discord, LINKS.youtube, LINKS.tiktok, LINKS.instagram, LINKS.steam].filter(Boolean),
       },
       {
         '@type': 'VideoGame', '@id': `${SITE}/#game`, name: 'SpareForge', url: home,

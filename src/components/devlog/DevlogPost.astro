@@ -1,0 +1,19 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Prose from '../../layouts/Prose.astro';
+import { ROUTES, type Lang } from '../../i18n';
+
+interface Props { post: CollectionEntry<'devlog'>; lang: Lang; otherSlug?: string }
+const { post, lang, otherSlug } = Astro.props;
+const { Content } = await render(post);
+const de = lang === 'de';
+const fmt = new Intl.DateTimeFormat(de ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const slug = post.id.split('/').pop();
+const alternates = otherSlug
+  ? { en: de ? `${ROUTES.devlog.en}/${otherSlug}` : `${ROUTES.devlog.en}/${slug}`, de: de ? `${ROUTES.devlog.de}/${slug}` : `${ROUTES.devlog.de}/${otherSlug}` }
+  : undefined;
+---
+<Prose lang={lang} route="devlog" alternates={alternates} title={`${post.data.title} · SpareForge`} heading={post.data.title.replace(/^Devlog #\d+:\s*/, '')} kicker={`Devlog · v${post.data.version} · ${fmt.format(post.data.date)}`} description={post.data.summary}>
+  <Content />
+  <p class="note"><a href={ROUTES.devlog[lang]}>← {de ? 'Alle Devlog-Beiträge' : 'All devlog posts'}</a></p>
+</Prose>

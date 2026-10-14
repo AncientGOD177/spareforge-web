@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Prose from '../../layouts/Prose.astro';
+import { ROUTES, type Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const de = lang === 'de';
+const posts = (await getCollection('devlog', (p) => p.data.lang === lang)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = new Intl.DateTimeFormat(de ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const slug = (id: string) => id.split('/').pop();
+---
+<Prose lang={lang} route="devlog" title={de ? 'Devlog · SpareForge' : 'Devlog · SpareForge'} heading="Devlog" kicker={de ? 'Aus der Schmiede' : 'From the forge'} description={de ? 'Update-Notizen und Entwicklungsberichte zur SpareForge-Alpha.' : 'Update notes and development posts for the SpareForge alpha.'}>
+  <ul class="c-posts">
+    {posts.map((p) => (
+      <li>
+        <a class="c-posts__card p-refine" href={`${ROUTES.devlog[lang]}/${slug(p.id)}`}>
+          <span class="c-posts__meta"><time datetime={p.data.date.toISOString().slice(0, 10)}>{fmt.format(p.data.date)}</time> · v{p.data.version}</span>
+          <span class="c-posts__title">{p.data.title}</span>
+          <span class="c-posts__sum">{p.data.summary}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Prose>
+<style>
+  .c-posts { list-style: none; padding: 0 !important; display: grid; gap: var(--sp-5) !important; }
+  .c-posts__card { display: grid; gap: 8px; padding: var(--sp-5); text-decoration: none; background: var(--night-800); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink); }
+  .c-posts__card:hover { background: var(--night-700); }
+  .c-posts__meta { font: 400 0.7rem/1 var(--font-chip); color: var(--faint); text-transform: uppercase; letter-spacing: 0.05em; }
+  .c-posts__title { font: 700 var(--fs-xl)/1.2 var(--font-display); color: var(--gold-100); }
+  .c-posts__sum { color: var(--muted); }
+</style>

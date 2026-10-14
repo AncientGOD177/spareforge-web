@@ -1,0 +1,12 @@
+---
+import { getCollection } from 'astro:content';
+import DevlogPost from '../../components/devlog/DevlogPost.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('devlog', (p) => p.data.lang === 'en');
+  return posts.map((post) => ({ params: { slug: post.id.split('/').pop() }, props: { post } }));
+}
+const { post } = Astro.props;
+// Posts share their slug across languages, so the DE alternate is the same slug.
+---
+<DevlogPost post={post} lang="en" otherSlug={post.id.split('/').pop()} />

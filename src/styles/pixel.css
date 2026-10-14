@@ -1,0 +1,123 @@
+/* Pixel-art material kit: 9-slice frames cut from the game's own UI, stepped corners,
+   dithered edges and pixel buttons. No border-radius anywhere. */
+
+/* Card frame: the game's tooltip panel (gold bevel, ink outline, dark-blue fill) at 2x */
+.p-frame {
+  position: relative;
+  border: 16px solid transparent;
+  border-image: url('../assets/ui/tooltip.png') 8 fill / 16px / 0 stretch;
+  image-rendering: pixelated;
+  background-clip: padding-box;
+}
+/* Featured frame: the game's window with red gem corners */
+.p-window {
+  position: relative;
+  border: 44px solid transparent;
+  border-image: url('../assets/ui/window.png') 44 fill / 44px / 0 stretch;
+  image-rendering: pixelated;
+}
+@media (max-width: 40rem) {
+  .p-window { border-width: 22px; border-image-width: 22px; }
+}
+/* Inset frame for media inside cards: the inventory slot frame */
+.p-inset {
+  position: relative;
+  border: 12px solid transparent;
+  border-image: url('../assets/ui/icon_frame.png') 12 fill / 12px / 0 stretch;
+  image-rendering: pixelated;
+}
+
+/* Stepped corners (4 px notches) */
+.p-notch {
+  clip-path: polygon(
+    var(--notch) 0, calc(100% - var(--notch)) 0, calc(100% - var(--notch)) var(--notch), 100% var(--notch),
+    100% calc(100% - var(--notch)), calc(100% - var(--notch)) calc(100% - var(--notch)), calc(100% - var(--notch)) 100%,
+    var(--notch) 100%, var(--notch) calc(100% - var(--notch)), 0 calc(100% - var(--notch)), 0 var(--notch), var(--notch) var(--notch)
+  );
+}
+
+/* Dithered section edges: a Bayer mask fades the top of the next surface into the previous one */
+.p-dither-top::before,
+.p-dither-bottom::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 24px; pointer-events: none; z-index: 1;
+  background: var(--dither-color, var(--night-900));
+  -webkit-mask: url('../assets/ui/bayer-12.png') 0 0 / 8px 8px repeat-x, url('../assets/ui/bayer-8.png') 0 8px / 8px 8px repeat-x, url('../assets/ui/bayer-4.png') 0 16px / 8px 8px repeat-x;
+  mask: url('../assets/ui/bayer-12.png') 0 0 / 8px 8px repeat-x, url('../assets/ui/bayer-8.png') 0 8px / 8px 8px repeat-x, url('../assets/ui/bayer-4.png') 0 16px / 8px 8px repeat-x;
+  image-rendering: pixelated;
+}
+.p-dither-top::before { top: -24px; }
+.p-dither-bottom::after { bottom: -24px; transform: scaleY(-1); }
+
+/* ---------- Buttons ---------- */
+.p-btn {
+  --btn-h: 52px;
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: var(--btn-h); padding: 0 22px;
+  font: 700 1.05rem/1 var(--font-display); letter-spacing: 0.02em; text-decoration: none;
+  cursor: pointer; user-select: none; -webkit-user-select: none;
+  border: 0;
+  transition: transform var(--t-micro) var(--ease-out), filter var(--t-micro) var(--ease-out);
+}
+.p-btn:active { transform: translateY(2px); }
+.p-btn svg { width: 18px; height: 18px; flex: none; image-rendering: pixelated; shape-rendering: crispEdges; }
+
+/* Primary: forged gold bar with a bronze outline and stepped bevel */
+.p-btn--gold {
+  color: var(--on-gold);
+  background: linear-gradient(var(--gold-200) 0 4px, var(--gold-300) 4px calc(100% - 6px), var(--gold-500) calc(100% - 6px));
+  box-shadow:
+    inset 2px 0 0 var(--gold-100), inset -2px 0 0 var(--gold-600),
+    0 0 0 2px var(--bronze-900), 0 0 0 4px var(--ink),
+    0 6px 0 0 var(--ink), 0 10px 24px -6px rgb(255 122 47 / 0.55);
+}
+.p-btn--gold:hover { color: var(--on-gold); filter: brightness(1.08) saturate(1.05); }
+.p-btn--gold:active { box-shadow:
+    inset 2px 0 0 var(--gold-100), inset -2px 0 0 var(--gold-600),
+    0 0 0 2px var(--bronze-900), 0 0 0 4px var(--ink), 0 4px 0 0 var(--ink); }
+
+/* Secondary: the game's own blue menu button (9-slice) */
+.p-btn--game {
+  color: var(--gold-100);
+  border: 10px solid transparent;
+  border-image: url('../assets/ui/btn_normal.png') 10 fill / 10px / 0 stretch;
+  image-rendering: pixelated;
+  padding: 0 14px;
+  min-height: var(--btn-h);
+  text-shadow: 0 2px 0 var(--ink);
+}
+.p-btn--game:hover { color: #fff; border-image-source: url('../assets/ui/btn_hover.png'); }
+.p-btn--game:active { border-image-source: url('../assets/ui/btn_pressed.png'); }
+
+/* Ghost: ink box with a gold pixel border */
+.p-btn--ghost {
+  color: var(--gold-200);
+  background: rgb(11 7 32 / 0.55);
+  box-shadow: inset 0 0 0 2px var(--gold-600), 0 0 0 2px var(--ink);
+}
+.p-btn--ghost:hover { color: var(--gold-100); background: rgb(38 27 90 / 0.7); }
+.p-btn--sm { --btn-h: 44px; font-size: 0.95rem; padding: 0 16px; }
+.p-btn--game.p-btn--sm { padding: 0 10px; }
+
+@media (hover: none) {
+  .p-btn--gold:hover, .p-btn--ghost:hover { filter: none; }
+}
+
+/* Refine glow ring: steps through the +3 / +5 / +7 / +10 colours on hover or focus */
+.p-refine { position: relative; isolation: isolate; }
+.p-refine::after {
+  content: ''; position: absolute; inset: -6px; z-index: -1; pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 0 2px var(--refine-3), 0 0 18px 2px var(--refine-3);
+  transition: opacity var(--t-ui) var(--ease-out);
+}
+@media (hover: hover) {
+  .p-refine:hover::after { opacity: 1; animation: refine-ramp 900ms steps(1, end) forwards; }
+}
+.p-refine:focus-within::after { opacity: 1; animation: refine-ramp 900ms steps(1, end) forwards; }
+@keyframes refine-ramp {
+  0%   { box-shadow: 0 0 0 2px var(--refine-3), 0 0 14px 2px rgb(232 244 255 / 0.5); }
+  25%  { box-shadow: 0 0 0 2px var(--refine-5), 0 0 18px 3px rgb(74 168 255 / 0.55); }
+  50%  { box-shadow: 0 0 0 2px var(--refine-7), 0 0 22px 4px rgb(255 201 60 / 0.6); }
+  75%, 100% { box-shadow: 0 0 0 2px var(--refine-10a), -6px 0 22px 2px rgb(180 107 255 / 0.55), 6px 0 22px 2px rgb(91 209 106 / 0.45), 0 0 26px 4px rgb(255 77 109 / 0.5); }
+}

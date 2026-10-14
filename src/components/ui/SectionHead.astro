@@ -1,0 +1,10 @@
+---
+interface Props { kicker: string; title: string; lead?: string; id: string; center?: boolean; as?: 'h1' | 'h2' }
+const { kicker, title, lead, id, center = false, as: Tag = 'h2' } = Astro.props;
+---
+<header class:list={['c-head', { 'c-head--center': center }]} data-reveal>
+  <p class="c-head__kicker">{kicker}</p>
+  <Tag class="c-head__title" id={id} set:html={title} />
+  {lead && <p class="c-head__lead">{lead}</p>}
+  <slot />
+</header>

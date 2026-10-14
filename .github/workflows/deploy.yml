@@ -19,6 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Videos live on the orphan `media` branch so they never bloat main's history.
+      - uses: actions/checkout@v4
+        with:
+          ref: media
+          path: public/media
+      - run: rm -rf public/media/.git
       - uses: actions/setup-node@v4
         with:
           node-version: 22

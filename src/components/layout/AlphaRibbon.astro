@@ -1,0 +1,62 @@
+---
+import { BUILD } from '../../data/build';
+import { homeAnchor, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = lang === 'de'
+  ? { text: 'kostenlos, Discord-Key nötig', link: 'Was ist neu', dismiss: 'Hinweis ausblenden' }
+  : { text: 'free, Discord key required', link: "What's new", dismiss: 'Hide this notice' };
+---
+<!-- Dismissal is remembered per build (sf:ribbon = version), written only when the visitor clicks. -->
+<div class="c-ribbon" data-ribbon={BUILD.version} role="note">
+  <p class="c-ribbon__text">
+    <span class="c-ribbon__dot" aria-hidden="true"></span>
+    <strong>{BUILD.stage.toUpperCase()} {BUILD.version}</strong>
+    <span class="c-ribbon__sep" aria-hidden="true">·</span>
+    <span>{t.text}</span>
+    <a href={homeAnchor(lang, 'roadmap')}>{t.link} <span aria-hidden="true">→</span></a>
+  </p>
+  <button class="c-ribbon__close" type="button" data-ribbon-close>
+    <svg viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M1 1h1v1h1v1h2V2h1V1h1v1H6v1H5v2h1v1h1v1H6V6H5V5H3v1H2v1H1V6h1V5h1V3H2V2H1z" /></svg>
+    <span class="u-sr">{t.dismiss}</span>
+  </button>
+</div>
+<script is:inline>
+  (function () {
+    try {
+      var r = document.querySelector('[data-ribbon]');
+      if (r && localStorage.getItem('sf:ribbon') === r.getAttribute('data-ribbon')) r.hidden = true;
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  .c-ribbon {
+    position: relative; z-index: 51;
+    display: flex; align-items: center; justify-content: center; gap: var(--sp-3);
+    min-height: 36px; padding: 4px 48px 4px var(--gutter);
+    background: var(--alpha-700);
+    box-shadow: inset 0 -2px 0 var(--alpha-900);
+    color: var(--text);
+  }
+  .c-ribbon[hidden] { display: none; }
+  .c-ribbon__text {
+    margin: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 8px; row-gap: 2px;
+    font: 400 0.7rem/1.3 var(--font-chip); letter-spacing: 0.06em; text-transform: uppercase; text-align: center;
+    -webkit-font-smoothing: none;
+  }
+  .c-ribbon__text strong { font-weight: 400; color: var(--gold-100); }
+  .c-ribbon__sep { color: var(--gold-200); }
+  .c-ribbon__text a { color: var(--gold-100); text-decoration: underline; text-underline-offset: 3px; display: inline-flex; min-height: 28px; align-items: center; }
+  .c-ribbon__dot { width: 8px; height: 8px; background: var(--ember-300); box-shadow: 0 0 0 2px var(--alpha-900); }
+  html.motion-ok .c-ribbon__dot { animation: live 1.6s steps(2) infinite; }
+  @keyframes live { 50% { background: var(--ember-500); box-shadow: 0 0 0 2px var(--alpha-900), 0 0 10px 2px rgb(255 122 47 / 0.8); } }
+  .c-ribbon__close {
+    position: absolute; right: 4px; top: 50%; translate: 0 -50%;
+    width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer;
+    background: none; border: 0; color: var(--gold-100);
+  }
+  .c-ribbon__close svg { width: 12px; height: 12px; }
+  .c-ribbon__close:hover { color: var(--text); background: var(--alpha-900); }
+  @media (max-width: 30rem) { .c-ribbon__sep { display: none; } .c-ribbon { min-height: 56px; } }
+</style>

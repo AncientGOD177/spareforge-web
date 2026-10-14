@@ -1,0 +1,87 @@
+/* SpareForge design tokens: "The Forge at Night".
+   Colours are only defined here. Components reference tokens, never raw hex. */
+:root {
+  color-scheme: dark;
+
+  /* Night surfaces */
+  --night-975: #070418;
+  --night-950: #0b0720;
+  --night-900: #120c2e;
+  --night-800: #1b1442;
+  --night-700: #261b5a;
+  --night-600: #3a2a7a;
+  --star: #cfc6ff;
+
+  /* Forge gold (sampled from the wordmark) */
+  --gold-100: #f0f0c0;
+  --gold-200: #f0d890;
+  --gold-300: #ffc93c;
+  --gold-400: #d8a848;
+  --gold-500: #c09030;
+  --gold-600: #a87830;
+  --bronze-800: #784818;
+  --bronze-900: #481800;
+
+  /* Ember accent */
+  --ember-300: #ffb35c;
+  --ember-500: #ff7a2f;
+  --ember-700: #c2410c;
+
+  /* Alpha plate */
+  --alpha-500: #d8333c;
+  --alpha-700: #a3202a;
+  --alpha-900: #5e0f16;
+
+  /* Game UI blue (buttons, insets) */
+  --ui-blue-900: #0c0f1b;
+  --ui-blue-800: #141a30;
+  --ui-blue-700: #1e3159;
+  --ui-blue-500: #3e5e99;
+
+  /* Refine glow ramp (+3 shimmer, +5 blue halo, +7 golden, +10 rainbow), from the 0.1.6 notes */
+  --refine-3: #e8f4ff;
+  --refine-5: #4aa8ff;
+  --refine-7: #ffc93c;
+  --refine-10a: #ff4d6d;
+  --refine-10b: #b46bff;
+  --refine-10c: #5bd16a;
+
+  /* Text */
+  --text: #f4eefc;
+  --muted: #bdb2dc;
+  --faint: #9d93c4;
+  --on-gold: #2a1204;
+  --ink: #0d0a12; /* the game's 1px outline colour */
+
+  /* Type */
+  --font-display: 'Pixelify Sans', 'Cascadia Mono', ui-monospace, system-ui, sans-serif;
+  --font-body: 'Alegreya Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-chip: 'Silkscreen', 'Pixelify Sans', ui-monospace, monospace;
+
+  --fs-xs: 0.8rem;
+  --fs-sm: 0.92rem;
+  --fs-base: clamp(1.05rem, 1rem + 0.25vw, 1.2rem);
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: clamp(1.6rem, 1.3rem + 1.4vw, 2.25rem);
+  --fs-3xl: clamp(2rem, 1.4rem + 2.8vw, 3.5rem);
+  --fs-hero: clamp(1.15rem, 1rem + 0.8vw, 1.5rem);
+  --lh-tight: 1.1;
+  --lh-body: 1.6;
+
+  /* Space (4 px base) */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
+  --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px; --sp-10: 128px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --container: min(1200px, 100% - 2 * var(--gutter));
+  --section-pad: clamp(64px, 8vw, 112px);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --t-micro: 140ms;
+  --t-ui: 240ms;
+
+  /* Pixel bevels (CSS fallback for the 9-slice frames) */
+  --bevel-gold: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold-500), 0 0 0 6px var(--ink);
+  --notch: 4px;
+}

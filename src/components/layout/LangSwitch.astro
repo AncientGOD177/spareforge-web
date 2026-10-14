@@ -1,0 +1,20 @@
+---
+import { UI, type Lang } from '../../i18n';
+interface Props { lang: Lang; alternates: { en: string; de: string } }
+const { lang, alternates } = Astro.props;
+---
+<div class="c-lang" role="group" aria-label={UI[lang].nav.lang}>
+  <a href={alternates.en} hreflang="en" lang="en" aria-current={lang === 'en' ? 'page' : undefined} data-lang-link="en">EN</a>
+  <a href={alternates.de} hreflang="de" lang="de" aria-current={lang === 'de' ? 'page' : undefined} data-lang-link="de">DE</a>
+</div>
+
+<style>
+  .c-lang { display: flex; gap: 2px; padding: 2px; background: var(--ink); }
+  .c-lang a {
+    display: inline-grid; place-items: center; min-width: 44px; min-height: 40px; padding: 0 8px;
+    font: 400 0.78rem/1 var(--font-chip); letter-spacing: 0.08em; text-decoration: none;
+    color: var(--muted); background: var(--night-800);
+  }
+  .c-lang a:hover { color: var(--gold-100); background: var(--night-700); }
+  .c-lang a[aria-current='page'] { color: var(--on-gold); background: var(--gold-300); }
+</style>

@@ -1,50 +1,114 @@
 ---
-import '@fontsource/pixelify-sans/600.css';
-import '../styles/global.css';
-import { LINKS } from '../site';
-interface Props { title?: string; description?: string; image?: string }
-const {
-  title = 'SpareForge: a pixel action RPG',
-  description = 'An original pixel-art action RPG built by one person. Six classes, twelve jobs, twenty regions, loot worth hunting and LAN co-op for up to four players. Free alpha.',
-  image = '/img/og.jpg',
-} = Astro.props;
-const url = new URL(Astro.url.pathname, Astro.site);
-const og = new URL(image, Astro.site);
+import '@fontsource/pixelify-sans/latin-700.css';
+import '@fontsource/alegreya-sans/latin-400.css';
+import '@fontsource/alegreya-sans/latin-700.css';
+import '@fontsource/silkscreen/latin-400.css';
+import pixelify700 from '@fontsource/pixelify-sans/files/pixelify-sans-latin-700-normal.woff2?url';
+import silkscreen400 from '@fontsource/silkscreen/files/silkscreen-latin-400-normal.woff2?url';
+import '../styles/base.css';
+import '../styles/pixel.css';
+import AlphaRibbon from '../components/layout/AlphaRibbon.astro';
+import Nav from '../components/layout/Nav.astro';
+import Footer from '../components/layout/Footer.astro';
+import { META, ROUTES, type Lang, type RouteKey } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  route: RouteKey;
+  /** Path override for routes with params (devlog posts). */
+  alternates?: { en?: string; de?: string };
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  jsonld?: object | object[];
+  noindex?: boolean;
+  preload?: { href?: string; srcset?: string; sizes?: string; type?: string }[];
+}
+const { lang, route, alternates, title, description, image, imageAlt, jsonld, noindex = false, preload = [] } = Astro.props;
+const meta = META[lang];
+const pageTitle = title ?? meta.title;
+const pageDesc = description ?? meta.description;
+const site = Astro.site!;
+const url = new URL(Astro.url.pathname.replace(/\.html$/, ''), site);
+const og = new URL(image ?? (lang === 'de' ? '/img/og-v2-de.jpg' : '/img/og-v2.jpg'), site);
+const alt = {
+  en: alternates?.en ?? ROUTES[route].en,
+  de: alternates?.de ?? ROUTES[route].de,
+};
+const showAlternates = route !== 'notFound';
+const ld = jsonld ? (Array.isArray(jsonld) ? jsonld : [jsonld]) : [];
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang} dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#120c2e" />
-    <meta name="color-scheme" content="dark" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.web3forms.com; form-action 'self' https://api.web3forms.com; frame-src 'none'; object-src 'none'; base-uri 'self'"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={url} />
+    {showAlternates && <link rel="alternate" hreflang="en" href={new URL(alt.en, site)} />}
+    {showAlternates && <link rel="alternate" hreflang="de" href={new URL(alt.de, site)} />}
+    {showAlternates && <link rel="alternate" hreflang="x-default" href={new URL(alt.en, site)} />}
+    <meta name="theme-color" content="#ffc93c" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preload" href={pixelify700} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={silkscreen400} as="font" type="font/woff2" crossorigin />
+    {preload.map((p) => (
+      <link rel="preload" as="image" href={p.href} imagesrcset={p.srcset} imagesizes={p.sizes} type={p.type} fetchpriority="high" />
+    ))}
+
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="SpareForge" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:locale" content={meta.locale} />
+    <meta property="og:locale:alternate" content={lang === 'en' ? 'de_DE' : 'en_US'} />
     <meta property="og:image" content={og} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt ?? meta.ogAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image" content={og} />
+    <meta name="twitter:image:alt" content={imageAlt ?? meta.ogAlt} />
+    {ld.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
+
+    <!-- Motion preference runs before first paint: reduced-motion users never see a reveal or a video. -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement, pref = null;
+        d.classList.add('js');
+        try { pref = localStorage.getItem('sf:motion'); } catch (e) {}
+        var sys = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        d.classList.add(pref === 'reduce' || (sys && pref !== 'full') ? 'reduce-motion' : 'motion-ok');
+      })();
+    </script>
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
-    <header class="nav">
-      <a class="brand" href="/" aria-label="SpareForge, home">SpareForge</a>
-      <nav aria-label="Main">
-        <a href="/#game">The game</a>
-        <a href="/#screens">Screens</a>
-        <a href="/#alpha">Alpha</a>
-        <a class="nav-discord" href={LINKS.discord} rel="noopener">Discord</a>
-      </nav>
-    </header>
-    <main id="main"><slot /></main>
-    <footer class="foot">
-      <p>© 2026 SpareForge. Pixel art, music and sound made for the game.</p>
-      <p><a href={LINKS.discord} rel="noopener">Discord</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/impressum">Impressum</a></p>
-    </footer>
+    <a class="skip" href="#main">{lang === 'de' ? 'Zum Inhalt springen' : 'Skip to content'}</a>
+    <AlphaRibbon lang={lang} />
+    <Nav lang={lang} route={route} alternates={alt} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer lang={lang} route={route} alternates={alt} />
+    <script>
+      import '../scripts/site';
+    </script>
   </body>
 </html>

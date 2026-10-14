@@ -1,0 +1,61 @@
+---
+import Base from './Base.astro';
+import type { Lang, RouteKey } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  route: RouteKey;
+  title: string;
+  heading: string;
+  description: string;
+  kicker?: string;
+  updated?: string;
+  noindex?: boolean;
+  alternates?: { en?: string; de?: string };
+}
+const { lang, route, title, heading, description, kicker, updated, noindex, alternates } = Astro.props;
+const updatedLabel = lang === 'de' ? 'Stand' : 'Last updated';
+---
+<Base lang={lang} route={route} title={title} description={description} noindex={noindex} alternates={alternates}>
+  <article class="c-prose-page">
+    <header class="c-prose-page__head">
+      <div class="l-container">
+        {kicker && <p class="c-head__kicker">{kicker}</p>}
+        <h1 class="c-prose-page__title">{heading}</h1>
+        {updated && <p class="c-prose-page__updated"><span class="c-chip">{updatedLabel}: {updated}</span></p>}
+      </div>
+    </header>
+    <div class="l-container c-prose-page__body">
+      <div class="c-prose">
+        <slot />
+      </div>
+      <slot name="aside" />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .c-prose-page__head { position: relative; padding-block: clamp(56px, 9vw, 112px) var(--sp-7); background: radial-gradient(70% 120% at 50% 0%, var(--night-800), var(--night-950) 70%); }
+  .c-prose-page__head::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold-600), transparent); }
+  .c-prose-page__title { font: 700 clamp(1.7rem, 1.1rem + 3vw, 3.5rem)/1.08 var(--font-display); hyphens: auto; overflow-wrap: break-word; color: var(--gold-100); margin: var(--sp-3) 0 0; text-shadow: 0 3px 0 var(--ink); }
+  .c-prose-page__updated { margin: var(--sp-4) 0 0; }
+  .c-prose-page__body { padding-block: var(--sp-7) var(--sp-9); display: grid; gap: var(--sp-7); }
+  @media (min-width: 64rem) { .c-prose-page__body:has(> :nth-child(2)) { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; } }
+
+  .c-prose { max-width: 72ch; min-width: 0; overflow-wrap: anywhere; }
+  .c-prose :global(h2) { font: 700 var(--fs-xl)/1.2 var(--font-display); color: var(--gold-100); margin: var(--sp-7) 0 var(--sp-3); padding-top: var(--sp-2); }
+  .c-prose :global(h2:first-child) { margin-top: 0; }
+  .c-prose :global(h3) { font: 700 var(--fs-lg)/1.3 var(--font-display); color: var(--text); margin: var(--sp-5) 0 var(--sp-2); }
+  .c-prose :global(p), .c-prose :global(li) { color: var(--muted); }
+  .c-prose :global(strong) { color: var(--text); }
+  .c-prose :global(ul) { padding-left: 1.2em; display: grid; gap: 6px; margin: 0 0 1em; }
+  .c-prose :global(li::marker) { color: var(--gold-500); }
+  .c-prose :global(address) { font-style: normal; color: var(--text); padding: var(--sp-4) var(--sp-5); background: var(--night-800); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink); margin: var(--sp-3) 0 var(--sp-5); display: inline-block; line-height: 1.7; }
+  .c-prose :global(.note) { padding: var(--sp-4) var(--sp-5); background: var(--night-900); box-shadow: inset 4px 0 0 var(--gold-500); color: var(--muted); }
+  .c-prose :global(.todo) { color: var(--ember-300); font-family: var(--font-chip); font-size: 0.8rem; }
+  .c-prose :global(code) { font: 400 0.82em/1 var(--font-chip); padding: 2px 6px; background: var(--ui-blue-800); color: var(--gold-100); }
+  .c-prose :global(table) { width: 100%; border-collapse: collapse; margin: var(--sp-3) 0 var(--sp-5); font-size: var(--fs-sm); }
+  .c-prose :global(th), .c-prose :global(td) { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--night-700); color: var(--muted); vertical-align: top; }
+  .c-prose :global(th) { color: var(--gold-200); font-weight: 700; }
+  .c-prose :global(.table-wrap) { overflow-x: auto; }
+</style>

@@ -1,0 +1,149 @@
+---
+import { Image } from 'astro:assets';
+import wordmark from '../../assets/brand/wordmark.png';
+import { UI, homeAnchor, ROUTES, type Lang, type RouteKey } from '../../i18n';
+import LangSwitch from './LangSwitch.astro';
+
+interface Props { lang: Lang; route: RouteKey; alternates: { en: string; de: string } }
+const { lang, route, alternates } = Astro.props;
+const t = UI[lang].nav;
+const links = [
+  ['game', t.game],
+  ['classes', t.classes],
+  ['videos', t.videos],
+  ['gallery', t.gallery],
+  ['roadmap', t.roadmap],
+  ['faq', t.faq],
+] as const;
+const home = ROUTES.home[lang];
+const join = route === 'alpha' ? '#alpha' : homeAnchor(lang, 'alpha');
+---
+<header class="c-nav" data-nav>
+  <div class="c-nav__bar">
+    <a class="c-nav__brand" href={home}>
+      <svg class="c-nav__anvil" viewBox="0 0 32 32" aria-hidden="true">
+        <path fill="var(--ink)" d="M3 11h21c0 4-2.6 6.6-6 7v1h4v6H8v-6h4v-1c-3.4-.4-6-3-6-6H3z" />
+        <path fill="var(--gold-300)" d="M5 13h17c0 3-2 5-5 5v3h4v3H11v-3h4v-3c-3 0-5-2-5-5H5z" />
+        <path fill="var(--gold-100)" d="M5 13h17v1H5z" />
+        <path fill="var(--alpha-500)" d="M21 6h3v3h-3z" /><path fill="var(--gold-300)" d="M25 9h2v2h-2z" /><path fill="var(--ember-500)" d="M18 3h2v2h-2z" />
+      </svg>
+      <Image src={wordmark} alt="SpareForge" width={154} height={34} class="c-nav__word" loading="eager" />
+      <span class="c-chip c-chip--alpha c-nav__alpha">Alpha</span>
+      <span class="u-sr">, {lang === 'de' ? 'Startseite' : 'home'}</span>
+    </a>
+
+    <nav class="c-nav__links" aria-label={t.label}>
+      <ul>
+        {links.map(([id, label]) => <li><a href={homeAnchor(lang, id)}>{label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="c-nav__end">
+      <LangSwitch lang={lang} alternates={alternates} />
+      <a class="p-btn p-btn--gold p-btn--sm c-nav__join" href={join}>{t.join}</a>
+      <button class="c-nav__menu" type="button" aria-haspopup="dialog" aria-controls="mobile-menu" data-menu-open>
+        <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M2 3h12v2H2zM2 7h12v2H2zM2 11h12v2H2z" /></svg>
+        <span class="u-sr">{t.menu}</span>
+      </button>
+    </div>
+  </div>
+
+  <dialog id="mobile-menu" class="c-menu" aria-label={t.menu} data-menu>
+    <div class="c-menu__inner p-window">
+      <div class="c-menu__head">
+        <span class="c-menu__title">{t.menu}</span>
+        <button class="c-menu__close" type="button" data-menu-close>
+          <svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M3 2h2v1h1v1h1v1h2V4h1V3h1V2h2v2h-1v1h-1v1h-1v1H9v2h1v1h1v1h1v1h1v2h-2v-1h-1v-1H9v-1H7v1H6v1H5v1H3v-2h1v-1h1v-1h1V9h1V7H6V6H5V5H4V4H3z" /></svg>
+          <span class="u-sr">{t.close}</span>
+        </button>
+      </div>
+      <ul class="c-menu__links">
+        {links.map(([id, label]) => <li><a href={homeAnchor(lang, id)} data-menu-link>{label}</a></li>)}
+      </ul>
+      <a class="p-btn p-btn--gold c-menu__join" href={join} data-menu-link>{t.join}</a>
+      <LangSwitch lang={lang} alternates={alternates} />
+    </div>
+  </dialog>
+</header>
+
+<style>
+  .c-nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgb(11 7 32 / 0.82);
+    backdrop-filter: blur(10px) saturate(1.2);
+    -webkit-backdrop-filter: blur(10px) saturate(1.2);
+    box-shadow: 0 2px 0 var(--ink), 0 4px 0 rgb(192 144 48 / 0.35);
+  }
+  .c-nav__bar {
+    width: min(1320px, 100% - 2 * var(--gutter)); margin-inline: auto;
+    display: flex; align-items: center; gap: var(--sp-5); min-height: 64px;
+  }
+  .c-nav__brand { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; text-decoration: none; flex: none; }
+  .c-nav__anvil { width: 32px; height: 32px; image-rendering: pixelated; }
+  .c-nav__word { width: 132px; height: auto; image-rendering: auto; }
+  .c-nav__alpha { padding: 4px 6px 3px; font-size: 0.6rem; translate: 0 6px; }
+  .c-nav__links { margin-inline: auto; display: none; }
+  .c-nav__links ul { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
+  .c-nav__links a {
+    position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px;
+    color: var(--muted); text-decoration: none; font: 700 1rem/1 var(--font-display); letter-spacing: 0.02em;
+    transition: color var(--t-micro) var(--ease-out);
+  }
+  .c-nav__links a::after {
+    content: ''; position: absolute; left: 14px; right: 14px; bottom: 8px; height: 2px;
+    background: var(--gold-300); box-shadow: 0 2px 0 var(--ink);
+    transform: scaleX(0); transform-origin: left; transition: transform var(--t-ui) steps(4);
+  }
+  .c-nav__links a:hover, .c-nav__links a[aria-current='true'] { color: var(--gold-100); }
+  .c-nav__links a:hover::after, .c-nav__links a[aria-current='true']::after { transform: scaleX(1); }
+  .c-nav__end { display: flex; align-items: center; gap: var(--sp-3); margin-left: auto; }
+  .c-nav__end > :global(.c-lang) { display: none; }
+  .c-nav__menu {
+    display: inline-grid; place-items: center; width: 48px; height: 48px; padding: 0; cursor: pointer;
+    background: var(--night-800); color: var(--gold-200); border: 0;
+    box-shadow: inset 0 0 0 2px var(--gold-600), 0 0 0 2px var(--ink);
+  }
+  .c-nav__menu svg { width: 20px; height: 20px; }
+  @media (min-width: 72rem) {
+    .c-nav__links { display: block; }
+    .c-nav__menu { display: none; }
+    .c-nav__links { margin-inline: auto 0; }
+    .c-nav__end { margin-left: 0; }
+    .c-nav__end > :global(.c-lang) { display: flex; }
+  }
+  @media (max-width: 23rem) {
+    .c-nav__word { display: none; }
+  }
+  .c-nav__join { white-space: nowrap; }
+  @media (max-width: 30rem) {
+    .c-nav__bar { gap: var(--sp-3); }
+    .c-nav__join { padding: 0 12px; font-size: 0.9rem; }
+    .c-nav__alpha { display: none; }
+    .c-nav__word { width: 104px; }
+    .c-nav__anvil { width: 28px; height: 28px; }
+  }
+
+  /* Full-screen pixel-framed menu (native dialog: focus trap, Esc, inert page) */
+  .c-menu {
+    width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: var(--gutter);
+    border: 0; background: rgb(7 4 24 / 0.94); color: var(--text);
+  }
+  .c-menu::backdrop { background: rgb(7 4 24 / 0.7); }
+  .c-menu[open] { display: grid; place-items: center; }
+  html.motion-ok .c-menu[open] .c-menu__inner { animation: menu-in 240ms var(--ease-out); }
+  @keyframes menu-in { from { opacity: 0; transform: translateY(10px) scale(0.98); } }
+  .c-menu__inner { width: min(420px, 100%); background: var(--ui-blue-900); display: grid; gap: var(--sp-5); padding: var(--sp-3); }
+  .c-menu__head { display: flex; align-items: center; justify-content: space-between; }
+  .c-menu__title { font: 400 0.8rem/1 var(--font-chip); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember-300); }
+  .c-menu__close { width: 48px; height: 48px; display: grid; place-items: center; border: 0; cursor: pointer; background: var(--alpha-700); color: var(--text); box-shadow: inset 0 0 0 2px var(--alpha-500), 0 0 0 2px var(--ink); }
+  .c-menu__close svg { width: 18px; height: 18px; }
+  .c-menu__links { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .c-menu__links a {
+    display: flex; align-items: center; min-height: 52px; padding: 0 var(--sp-4);
+    font: 700 1.35rem/1 var(--font-display); color: var(--gold-100); text-decoration: none;
+    background: linear-gradient(90deg, rgb(62 94 153 / 0.25), transparent);
+    box-shadow: inset 2px 0 0 var(--gold-600);
+  }
+  .c-menu__links a:hover { background: linear-gradient(90deg, rgb(255 201 60 / 0.18), transparent); }
+  .c-menu__join { width: 100%; }
+</style>

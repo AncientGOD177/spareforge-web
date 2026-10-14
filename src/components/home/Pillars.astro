@@ -1,0 +1,106 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from '../ui/SectionHead.astro';
+import { HOME } from '../../i18n/home';
+import { LOOPS } from '../../data/videos';
+import type { Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = HOME[lang].pillars;
+---
+<section id="game" class="l-section c-pillars" aria-labelledby="game-title">
+  <div class="l-container">
+    <SectionHead id="game-title" kicker={t.kicker} title={t.title} lead={t.lead} />
+    <ul class="c-pillars__grid">
+      {t.items.map((item, i) => {
+        const loop = LOOPS[item.id];
+        return (
+          <li class="c-pillar p-refine" data-reveal style={`--i:${i % 3}`} data-loop={JSON.stringify(loop.sources)}>
+            <div class="c-pillar__media p-inset">
+              <Picture src={loop.poster} formats={['avif', 'webp']} fallbackFormat="webp" widths={[320, 640]} sizes="(min-width: 64rem) 360px, (min-width: 40rem) 45vw, 90vw" alt="" loading="lazy" decoding="async" class="c-pillar__poster" />
+            </div>
+            <div class="c-pillar__body">
+              <span class="c-chip">{item.chip}</span>
+              <h3 class="c-pillar__title">{item.title}</h3>
+              <p class="c-pillar__text">{item.text}</p>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+    <div class="c-pillars__also" data-reveal>
+      <h3 class="c-pillars__also-title">{t.also}</h3>
+      <ul>{t.alsoList.map((x) => <li>{x}</li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-pillars { background: var(--night-950); }
+  .c-pillars__grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-5); grid-template-columns: 1fr; }
+  @media (min-width: 40rem) { .c-pillars__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 64rem) { .c-pillars__grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-6); } }
+  .c-pillar {
+    display: flex; flex-direction: column;
+    background: linear-gradient(180deg, var(--night-800), var(--night-900));
+    box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink), 0 14px 30px -12px rgb(0 0 0 / 0.6);
+  }
+  .c-pillar__media { aspect-ratio: 16 / 9; overflow: hidden; background: var(--ink); margin: 10px 10px 0; }
+  .c-pillar__media :global(img), .c-pillar__media :global(video) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .c-pillar__media { position: relative; }
+  .c-pillar__media :global(video) { position: absolute; inset: 0; opacity: 0; transition: opacity 300ms var(--ease-out); }
+  .c-pillar__media :global(video.is-playing) { opacity: 1; }
+  .c-pillar__body { padding: var(--sp-4) var(--sp-5) var(--sp-5); display: grid; gap: var(--sp-3); align-content: start; justify-items: start; }
+  .c-pillar__title { font-size: var(--fs-xl); color: var(--gold-100); }
+  .c-pillar__text { margin: 0; color: var(--muted); }
+
+  .c-pillars__also {
+    margin-top: var(--sp-7); display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3) var(--sp-5);
+    padding: var(--sp-4) var(--sp-5); background: var(--night-900);
+    box-shadow: inset 0 2px 0 var(--night-700), inset 0 -2px 0 var(--night-700);
+  }
+  .c-pillars__also-title { font: 400 0.75rem/1 var(--font-chip); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember-300); }
+  .c-pillars__also ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); }
+  .c-pillars__also li { display: inline-flex; align-items: center; gap: 8px; }
+  .c-pillars__also li::before { content: ''; width: 6px; height: 6px; background: var(--gold-400); box-shadow: 0 0 0 1px var(--ink); }
+</style>
+
+<script>
+  import { motionOk } from '../../lib/motion';
+
+  // Micro-loops: created only when a tile is near the viewport. Touch devices play in view;
+  // mouse devices play on hover/focus. Reduced motion keeps the poster still.
+  const tiles = document.querySelectorAll<HTMLElement>('[data-loop]');
+  const hoverable = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  function ensureVideo(tile: HTMLElement) {
+    let v = tile.querySelector('video');
+    if (v) return v;
+    const sources = JSON.parse(tile.dataset.loop ?? '[]') as { src: string; type: string }[];
+    v = document.createElement('video');
+    v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true'); v.tabIndex = -1;
+    for (const s of sources) { const el = document.createElement('source'); el.src = s.src; el.type = s.type; v.append(el); }
+    v.addEventListener('playing', () => v!.classList.add('is-playing'));
+    tile.querySelector('.c-pillar__media')?.append(v);
+    return v;
+  }
+  const play = (tile: HTMLElement) => { if (motionOk()) ensureVideo(tile).play().catch(() => {}); };
+  const stop = (tile: HTMLElement) => tile.querySelector('video')?.pause();
+
+  if (hoverable) {
+    tiles.forEach((tile) => {
+      tile.addEventListener('pointerenter', () => play(tile));
+      tile.addEventListener('pointerleave', () => stop(tile));
+      tile.addEventListener('focusin', () => play(tile));
+      tile.addEventListener('focusout', () => stop(tile));
+    });
+  } else if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) (e.intersectionRatio > 0.6 ? play : stop)(e.target as HTMLElement);
+    }, { threshold: [0, 0.6] });
+    tiles.forEach((t) => io.observe(t));
+  }
+  addEventListener('sf:motion', () => { if (!motionOk()) tiles.forEach(stop); });
+</script>

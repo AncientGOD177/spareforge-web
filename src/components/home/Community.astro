@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import bdSky from '../../assets/ui/bd_sky.webp';
+import bdMountains from '../../assets/ui/bd_mountains.webp';
+import bdTown from '../../assets/ui/bd_town.webp';
+import { HOME } from '../../i18n/home';
+import { LINKS } from '../../site';
+import { FEATURES, steamLive } from '../../data/features';
+import type { Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = HOME[lang].community;
+const s = HOME[lang].steam;
+const socials = [
+  ['TikTok', LINKS.tiktok, 'M9 1h2.2c.2 1.6 1.3 2.8 2.8 3v2.3c-1 0-2-.3-2.8-.8V10a4 4 0 1 1-4-4v2.3A1.7 1.7 0 1 0 9 10z'],
+  ['Instagram', LINKS.instagram, 'M5 1h6a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4H5a4 4 0 0 1-4-4V5a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm3 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm3.5-3.2a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6Z'],
+  ['YouTube', LINKS.youtube, 'M15.7 4.3a2 2 0 0 0-1.4-1.4C13 2.6 8 2.6 8 2.6s-5 0-6.3.3A2 2 0 0 0 .3 4.3C0 5.6 0 8 0 8s0 2.4.3 3.7a2 2 0 0 0 1.4 1.4c1.3.3 6.3.3 6.3.3s5 0 6.3-.3a2 2 0 0 0 1.4-1.4C16 10.4 16 8 16 8s0-2.4-.3-3.7ZM6.4 10.4V5.6L10.6 8z'],
+] as const;
+const showSteam = FEATURES.steamTeaser === 'planned' || steamLive();
+---
+<section id="community" class="c-com" aria-labelledby="community-title">
+  <div class="c-com__scene" aria-hidden="true">
+    <Image src={bdSky} alt="" class="c-com__sky" widths={[640, 1280]} sizes="100vw" loading="lazy" />
+    <Image src={bdMountains} alt="" class="c-com__mtn" widths={[640, 1280]} sizes="100vw" loading="lazy" />
+    <Image src={bdTown} alt="" class="c-com__town" widths={[640, 1280]} sizes="100vw" loading="lazy" />
+  </div>
+  <div class="l-container c-com__inner">
+    <div class="c-com__card p-window" data-reveal>
+      <p class="c-head__kicker">{t.kicker}</p>
+      <h2 id="community-title" class="c-com__title" set:html={t.title} />
+      <p class="c-com__text">{t.text}</p>
+      <a class="p-btn p-btn--gold" href={LINKS.discord} rel="noopener">{t.cta}</a>
+      <div class="c-com__social">
+        <p>{t.follow}</p>
+        <ul>
+          {socials.map(([name, href, d]) => (
+            <li><a href={href} rel="noopener" aria-label={name}><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d={d} /></svg><span>{name}</span></a></li>
+          ))}
+        </ul>
+      </div>
+      {showSteam ? (
+        <div class="c-com__steam">
+          <p class="c-com__steam-title">{s.title}</p>
+          <p>{s.text}</p>
+          {steamLive()
+            ? <a class="p-btn p-btn--game" href={LINKS.steam} rel="noopener">{s.wishlist}</a>
+            : <span class="p-btn p-btn--ghost is-disabled" aria-disabled="true">{s.soon}</span>}
+        </div>
+      ) : (
+        <p class="c-com__steam-line"><span class="c-chip">{s.title}</span></p>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-com { position: relative; isolation: isolate; overflow: clip; padding-block: clamp(96px, 14vw, 180px); background: var(--night-950); }
+  .c-com__scene { position: absolute; inset: 0; z-index: -1; }
+  .c-com__scene :global(img) { position: absolute; left: 50%; translate: -50% 0; width: max(100%, 1280px); max-width: none; height: auto; image-rendering: auto; }
+  .c-com__sky { top: 0; height: 100% !important; object-fit: cover; }
+  .c-com__mtn { bottom: 4%; }
+  .c-com__town { bottom: 0; }
+  .c-com__scene::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--night-950) 0%, rgb(11 7 32 / 0.2) 30%, rgb(11 7 32 / 0.1) 70%, var(--night-975) 100%); }
+  @supports (animation-timeline: view()) {
+    :global(html.motion-ok) .c-com__mtn { animation: c-mtn linear both; animation-timeline: view(); }
+    :global(html.motion-ok) .c-com__town { animation: c-town linear both; animation-timeline: view(); }
+    @keyframes c-mtn { from { transform: translateY(32px); } to { transform: translateY(-16px); } }
+    @keyframes c-town { from { transform: translateY(56px); } to { transform: translateY(-8px); } }
+  }
+  .c-com__inner { display: grid; justify-items: center; }
+  .c-com__card { width: min(640px, 100%); background: var(--ui-blue-900); display: grid; gap: var(--sp-4); justify-items: center; text-align: center; padding: var(--sp-4); }
+  .c-com__title { font-size: var(--fs-3xl); }
+  .c-com__title :global(em) { font-style: normal; color: var(--gold-300); }
+  .c-com__text { color: var(--muted); max-width: 44ch; margin: 0; }
+  .c-com__social { margin-top: var(--sp-3); display: grid; gap: var(--sp-3); justify-items: center; }
+  .c-com__social p { margin: 0; font: 400 0.7rem/1 var(--font-chip); color: var(--faint); letter-spacing: 0.1em; text-transform: uppercase; }
+  .c-com__social ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .c-com__social a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; color: var(--gold-100); text-decoration: none; background: var(--night-800); box-shadow: inset 0 0 0 2px var(--night-600), 0 0 0 2px var(--ink); }
+  .c-com__social a:hover { background: var(--night-700); }
+  .c-com__social svg { width: 16px; height: 16px; }
+  .c-com__steam, .c-com__steam-line { margin: var(--sp-3) 0 0; }
+  .c-com__steam-title { font: 700 1.1rem/1 var(--font-display); color: var(--gold-100); }
+  .is-disabled { opacity: 0.6; cursor: not-allowed; }
+</style>

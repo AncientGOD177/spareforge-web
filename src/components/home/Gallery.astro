@@ -1,0 +1,232 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import SectionHead from '../ui/SectionHead.astro';
+import { HOME } from '../../i18n/home';
+import { SHOTS, type Tag } from '../../data/gallery';
+import type { Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = HOME[lang].gallery;
+const filters: ('all' | Tag)[] = ['all', 'classes', 'bosses', 'regions', 'loot', 'coop'];
+// Full-size lightbox files (AVIF + WebP 1920), fetched only when the lightbox opens.
+const full = await Promise.all(SHOTS.map(async (s) => {
+  const [avif, webp, avifS, webpS] = await Promise.all([
+    getImage({ src: s.img, format: 'avif', width: 1920, quality: 70 }),
+    getImage({ src: s.img, format: 'webp', width: 1920, quality: 82 }),
+    getImage({ src: s.img, format: 'avif', width: 960, quality: 70 }),
+    getImage({ src: s.img, format: 'webp', width: 960, quality: 82 }),
+  ]);
+  return { avif: `${avifS.src} 960w, ${avif.src} 1920w`, webp: `${webpS.src} 960w, ${webp.src} 1920w`, fallback: webp.src };
+}));
+---
+<section id="gallery" class="l-section l-section--alt c-gal p-dither-top" aria-labelledby="gallery-title" style="--dither-color: var(--night-900)">
+  <div class="l-container">
+    <SectionHead id="gallery-title" kicker={t.kicker} title={t.title} lead={t.lead} />
+
+    <div class="c-gal__filters" role="group" aria-label={t.filterLabel} data-gal-filters hidden>
+      {filters.map((f, i) => (
+        <button type="button" class="c-gal__filter" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={f}>{t.filters[f]}</button>
+      ))}
+    </div>
+
+    <ul class="c-gal__grid" data-gal>
+      {SHOTS.map((s, i) => (
+        <li class:list={['c-gal__item', { 'c-gal__item--wide': s.wide }]} data-tags={s.tags.join(' ')} data-reveal style={`--i:${i % 3}`}>
+          <a
+            class="c-gal__link p-refine"
+            href={full[i].fallback}
+            data-index={i}
+            data-avif={full[i].avif}
+            data-webp={full[i].webp}
+            data-title={s.title[lang]}
+            data-place={s.place}
+            data-alt={s.alt[lang]}
+            aria-label={t.open(s.title[lang])}
+          >
+            <Picture
+              src={s.img}
+              formats={['avif', 'webp']} fallbackFormat="webp"
+              widths={[480, 960, 1440]}
+              sizes={s.wide ? '(min-width: 64rem) 800px, (min-width: 40rem) 94vw, 94vw' : '(min-width: 64rem) 380px, (min-width: 40rem) 46vw, 94vw'}
+              alt={s.alt[lang]}
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="c-gal__cap">
+              <span class="c-gal__title">{s.title[lang]}</span>
+              <span class="c-gal__place">{s.place}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <dialog class="c-lb" aria-label={t.title.replace(/<[^>]+>/g, '')} data-lightbox>
+    <div class="c-lb__stage" data-lb-stage>
+      <picture data-lb-pic>
+        <source type="image/avif" data-lb-avif sizes="100vw" />
+        <source type="image/webp" data-lb-webp sizes="100vw" />
+        <img alt="" data-lb-img width="1920" height="1080" decoding="async" />
+      </picture>
+    </div>
+    <div class="c-lb__bar">
+      <p class="c-lb__cap"><span class="c-lb__title" data-lb-title></span> <span class="c-lb__place" data-lb-place></span></p>
+      <p class="c-lb__count" aria-live="polite" data-lb-count></p>
+    </div>
+    <button class="c-lb__btn c-lb__prev" type="button" data-lb-prev>
+      <svg viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M5 1h1v1H5v1H4v1H3v0h1v1h1v1h1v1H5V6H4V5H3V4H2V3h1V2h1V1z" /></svg>
+      <span class="u-sr">{t.prev}</span>
+    </button>
+    <button class="c-lb__btn c-lb__next" type="button" data-lb-next>
+      <svg viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M2 1h1v1h1v1h1v1h1v1H5v1H4v1H3v1H2V6h1V5h1V4H3V3H2z" /></svg>
+      <span class="u-sr">{t.next}</span>
+    </button>
+    <button class="c-lb__btn c-lb__close" type="button" data-lb-close>
+      <svg viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M1 1h1v1h1v1h2V2h1V1h1v1H6v1H5v2h1v1h1v1H6V6H5V5H3v1H2v1H1V6h1V5h1V3H2V2H1z" /></svg>
+      <span class="u-sr">{t.close}</span>
+    </button>
+  </dialog>
+</section>
+
+<style>
+  .c-gal__filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--sp-6); }
+  :global(html.js) .c-gal__filters[hidden] { display: flex; }
+  .c-gal__filter {
+    min-height: 44px; padding: 0 16px; cursor: pointer; border: 0;
+    font: 400 0.75rem/1 var(--font-chip); letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted); background: var(--night-800); box-shadow: inset 0 0 0 2px var(--night-600), 0 0 0 2px var(--ink);
+  }
+  .c-gal__filter:hover { color: var(--gold-100); }
+  .c-gal__filter[aria-pressed='true'] { color: var(--on-gold); background: var(--gold-300); box-shadow: inset 0 -3px 0 var(--gold-500), 0 0 0 2px var(--bronze-900), 0 0 0 4px var(--ink); }
+
+  .c-gal__grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-4); grid-template-columns: 1fr; grid-auto-flow: dense; }
+  @media (min-width: 40rem) { .c-gal__grid { grid-template-columns: repeat(2, 1fr); } .c-gal__item--wide { grid-column: span 2; } }
+  @media (min-width: 64rem) {
+    .c-gal__grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+    .c-gal__item--wide { grid-row: span 2; }
+    .c-gal__item--wide .c-gal__link { aspect-ratio: auto; height: 100%; }
+    .c-gal__item--wide .c-gal__title { font-size: 1.25rem; }
+  }
+  .c-gal__item[hidden] { display: none; }
+  .c-gal__link { position: relative; display: block; aspect-ratio: 16 / 9; background: var(--ink); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink); overflow: visible; }
+  .c-gal__link :global(picture), .c-gal__link :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .c-gal__link :global(img) { transition: transform 400ms var(--ease-out), filter 400ms var(--ease-out); }
+  .c-gal__link { overflow: clip; overflow-clip-margin: 8px; }
+  @media (hover: hover) {
+    .c-gal__link:hover :global(img) { transform: scale(1.03); filter: saturate(1.1) brightness(1.05); }
+  }
+  .c-gal__cap {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 14px 10px;
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px;
+    background: linear-gradient(to top, rgb(7 4 24 / 0.92), rgb(7 4 24 / 0.6) 60%, transparent);
+  }
+  .c-gal__title { font: 700 1rem/1.2 var(--font-display); color: var(--gold-100); text-shadow: 0 2px 0 var(--ink); }
+  .c-gal__place { font: 400 0.64rem/1 var(--font-chip); letter-spacing: 0.06em; text-transform: uppercase; color: var(--star); }
+
+  /* Lightbox */
+  .c-lb { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgb(7 4 24 / 0.96); color: var(--text); overflow: hidden; }
+  .c-lb[open] { display: grid; grid-template-rows: 1fr auto; }
+  .c-lb::backdrop { background: rgb(7 4 24 / 0.9); }
+  .c-lb__stage { position: relative; display: grid; place-items: center; padding: 64px clamp(8px, 7vw, 96px) 8px; min-height: 0; touch-action: pan-y; }
+  .c-lb__stage picture { display: contents; }
+  .c-lb__stage img {
+    max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain;
+    box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold-500), 0 0 0 6px var(--ink);
+    transition: opacity 220ms var(--ease-out), transform 260ms var(--ease-out);
+  }
+  .c-lb__stage img.is-loading { opacity: 0.35; }
+  :global(html.motion-ok) .c-lb[open] .c-lb__stage img.is-enter { animation: lb-in 260ms var(--ease-out); }
+  @keyframes lb-in { from { opacity: 0; transform: scale(0.97); } }
+  .c-lb__bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px; padding: 14px clamp(16px, 7vw, 96px) max(14px, env(safe-area-inset-bottom)); }
+  .c-lb__cap { margin: 0; }
+  .c-lb__title { font: 700 1.1rem/1.2 var(--font-display); color: var(--gold-100); }
+  .c-lb__place { font: 400 0.68rem/1 var(--font-chip); color: var(--star); text-transform: uppercase; letter-spacing: 0.06em; margin-left: 8px; }
+  .c-lb__count { margin: 0; font: 400 0.75rem/1 var(--font-chip); color: var(--muted); }
+  .c-lb__btn { position: absolute; width: 52px; height: 52px; display: grid; place-items: center; border: 0; cursor: pointer; color: var(--gold-100); background: var(--ui-blue-800); box-shadow: inset 0 0 0 2px var(--gold-600), 0 0 0 2px var(--ink); }
+  .c-lb__btn:hover { background: var(--ui-blue-700); color: var(--text); }
+  .c-lb__btn svg { width: 18px; height: 18px; }
+  .c-lb__prev { left: 12px; top: 50%; translate: 0 -50%; }
+  .c-lb__next { right: 12px; top: 50%; translate: 0 -50%; }
+  .c-lb__close { right: 12px; top: 8px; background: var(--alpha-700); box-shadow: inset 0 0 0 2px var(--alpha-500), 0 0 0 2px var(--ink); }
+  @media (max-width: 40rem) {
+    .c-lb__prev, .c-lb__next { top: auto; bottom: max(12px, env(safe-area-inset-bottom)); translate: none; }
+    .c-lb__bar { padding-inline: 76px; justify-content: center; text-align: center; min-height: 76px; }
+    .c-lb__place { display: block; margin: 6px 0 0; }
+  }
+</style>
+
+<script>
+  // Filters (aria-pressed buttons) + lightbox on a native <dialog>: Esc closes, ←/→ navigate,
+  // swipe on touch (40 px threshold), focus returns to the thumbnail, neighbours are preloaded.
+  const grid = document.querySelector<HTMLElement>('[data-gal]');
+  const filters = document.querySelector<HTMLElement>('[data-gal-filters]');
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+
+  if (grid && dlg) {
+    const items = [...grid.querySelectorAll<HTMLLIElement>('li')];
+    const links = items.map((li) => li.querySelector<HTMLAnchorElement>('a')!);
+    const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const srcAvif = dlg.querySelector<HTMLSourceElement>('[data-lb-avif]')!;
+    const srcWebp = dlg.querySelector<HTMLSourceElement>('[data-lb-webp]')!;
+    const title = dlg.querySelector('[data-lb-title]')!;
+    const place = dlg.querySelector('[data-lb-place]')!;
+    const count = dlg.querySelector('[data-lb-count]')!;
+    const countTpl = (i: number, n: number) => `${i} / ${n}`;
+    let visible = links;
+    let cur = 0;
+    let opener: HTMLElement | null = null;
+
+    const preload = (a?: HTMLAnchorElement) => { if (!a) return; const p = new Image(); p.sizes = '100vw'; p.srcset = a.dataset.webp!; };
+
+    const show = (i: number, enter = false) => {
+      cur = (i + visible.length) % visible.length;
+      const a = visible[cur];
+      img.classList.add('is-loading');
+      srcAvif.srcset = a.dataset.avif!; srcWebp.srcset = a.dataset.webp!;
+      img.src = a.href; img.alt = a.dataset.alt!;
+      img.onload = () => img.classList.remove('is-loading');
+      if (enter) { img.classList.remove('is-enter'); void img.offsetWidth; img.classList.add('is-enter'); }
+      title.textContent = a.dataset.title!; place.textContent = a.dataset.place!;
+      count.textContent = countTpl(cur + 1, visible.length);
+      preload(visible[(cur + 1) % visible.length]); preload(visible[(cur - 1 + visible.length) % visible.length]);
+    };
+
+    links.forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      opener = a;
+      show(visible.indexOf(a), true);
+      dlg.showModal();
+      document.documentElement.classList.add('is-locked');
+    }));
+    dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(cur - 1));
+    dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => show(cur + 1));
+    dlg.querySelector('[data-lb-close]')!.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(cur + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(cur - 1); }
+    });
+    dlg.addEventListener('close', () => { document.documentElement.classList.remove('is-locked'); opener?.focus(); });
+    dlg.addEventListener('click', (e) => { if (e.target === dlg || (e.target as HTMLElement).matches('[data-lb-stage]')) dlg.close(); });
+
+    let x0: number | null = null;
+    const stage = dlg.querySelector<HTMLElement>('[data-lb-stage]')!;
+    stage.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') x0 = e.clientX; });
+    stage.addEventListener('pointerup', (e) => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1));
+    });
+
+    if (filters) {
+      const buttons = [...filters.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+      buttons.forEach((b) => b.addEventListener('click', () => {
+        const f = b.dataset.filter!;
+        buttons.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+        items.forEach((li) => { li.hidden = f !== 'all' && !li.dataset.tags!.split(' ').includes(f); li.classList.add('is-in'); });
+        visible = links.filter((a) => !a.closest('li')!.hidden);
+      }));
+    }
+  }
+</script>

@@ -1,0 +1,55 @@
+---
+import { Picture } from 'astro:assets';
+import type { Video } from '../../data/videos';
+import { HOME } from '../../i18n/home';
+import type { Lang } from '../../i18n';
+
+interface Props { video: Video; lang: Lang; vertical?: boolean; sizes: string; widths: number[] }
+const { video, lang, vertical = false, sizes, widths } = Astro.props;
+const t = HOME[lang].videos;
+const title = video.title[lang];
+---
+<figure class:list={['c-vid', { 'c-vid--v': vertical }]} data-reveal>
+  <div class="c-vid__frame">
+    <button class="c-vid__facade" type="button" data-video={JSON.stringify(video.sources)} aria-label={t.play(title)}>
+      <Picture src={video.poster} formats={['avif', 'webp']} fallbackFormat="webp" widths={widths} sizes={sizes} alt="" loading="lazy" decoding="async" class="c-vid__poster" />
+      <span class="c-vid__play" aria-hidden="true">
+        <svg viewBox="0 0 8 8" shape-rendering="crispEdges"><path fill="currentColor" d="M2 1h1v1h1v1h1v1h1v1H5v1H4v1H3v1H2z" /></svg>
+      </span>
+      <span class="c-vid__dur" aria-hidden="true">{video.label}</span>
+    </button>
+  </div>
+  <figcaption class="c-vid__cap">
+    <span class="c-vid__title">{title}</span>
+    {video.aiVoice
+      ? <span class="c-vid__meta"><span class="c-chip c-chip--ai">{t.aiVoice}</span> <span class="c-vid__sub">{t.subs}</span></span>
+      : <span class="c-vid__meta c-vid__sub">{t.trailerMeta}</span>}
+  </figcaption>
+</figure>
+
+<style>
+  .c-vid { margin: 0; display: grid; gap: var(--sp-3); align-content: start; }
+  .c-vid__frame { position: relative; aspect-ratio: 16 / 9; background: var(--ink); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold-600), 0 0 0 6px var(--ink), 0 24px 48px -20px rgb(0 0 0 / 0.8); }
+  .c-vid--v .c-vid__frame { aspect-ratio: 9 / 16; box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink); }
+  .c-vid__facade { position: absolute; inset: 0; padding: 0; border: 0; cursor: pointer; background: none; display: block; width: 100%; }
+  .c-vid__facade :global(img), .c-vid__frame :global(video) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .c-vid__frame :global(video) { object-fit: contain; background: var(--ink); }
+  .c-vid__facade::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, transparent 30%, rgb(7 4 24 / 0.5)); transition: opacity var(--t-ui) var(--ease-out); }
+  .c-vid__facade:hover::after { opacity: 0.5; }
+  .c-vid__play {
+    position: absolute; z-index: 1; left: 50%; top: 50%; translate: -50% -50%;
+    width: 76px; height: 76px; display: grid; place-items: center; color: var(--on-gold);
+    background: linear-gradient(var(--gold-200) 0 4px, var(--gold-300) 4px calc(100% - 6px), var(--gold-500) calc(100% - 6px));
+    box-shadow: 0 0 0 2px var(--bronze-900), 0 0 0 4px var(--ink), 0 0 40px 6px rgb(255 122 47 / 0.45);
+    transition: transform var(--t-micro) var(--ease-out);
+  }
+  .c-vid--v .c-vid__play { width: 60px; height: 60px; top: 66%; }
+  .c-vid__play svg { width: 28px; height: 28px; translate: 2px 0; }
+  .c-vid__facade:hover .c-vid__play { transform: scale(1.06); }
+  .c-vid__facade:active .c-vid__play { transform: scale(0.97); }
+  .c-vid__dur { position: absolute; z-index: 1; right: 10px; bottom: 10px; padding: 5px 7px 4px; font: 400 0.7rem/1 var(--font-chip); color: var(--text); background: rgb(7 4 24 / 0.85); box-shadow: 0 0 0 2px var(--ink); }
+  .c-vid__cap { display: grid; gap: 6px; }
+  .c-vid__title { font: 700 var(--fs-lg)/1.2 var(--font-display); color: var(--gold-100); }
+  .c-vid__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .c-vid__sub { color: var(--faint); font-size: var(--fs-sm); }
+</style>

@@ -1,0 +1,39 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Hero from './Hero.astro';
+import Pillars from './Pillars.astro';
+import JobTree from './JobTree.astro';
+import Showcase from './Showcase.astro';
+import Gallery from './Gallery.astro';
+import AlphaFlow from './AlphaFlow.astro';
+import Roadmap from './Roadmap.astro';
+import Faq from './Faq.astro';
+import Community from './Community.astro';
+import heroPoster from '../../assets/posters/hero.webp';
+import { TRAILER, SHORTS } from '../../data/videos';
+import { homeGraph } from '../../lib/jsonld';
+import type { Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+// LCP: preload the AVIF hero poster with the same srcset the <picture> uses.
+const widths = [640, 960, 1280, 1920];
+const avif = await Promise.all(widths.map((w) => getImage({ src: heroPoster, format: 'avif', width: w })));
+const preload = [{ srcset: avif.map((a, i) => `${a.src} ${widths[i]}w`).join(', '), sizes: '(max-aspect-ratio: 16/9) 178vh, 100vw', type: 'image/avif' }];
+
+const posters: Record<string, string> = {};
+for (const v of [TRAILER, ...SHORTS]) posters[v.id] = (await getImage({ src: v.poster, format: 'jpg', width: 1280 })).src;
+---
+<Base lang={lang} route="home" jsonld={homeGraph(lang, posters)} preload={preload}>
+  <Hero lang={lang} />
+  <Pillars lang={lang} />
+  <JobTree lang={lang} />
+  <Showcase lang={lang} />
+  <Gallery lang={lang} />
+  <AlphaFlow lang={lang} />
+  <Roadmap lang={lang} />
+  <Faq lang={lang} />
+  <Community lang={lang} />
+</Base>

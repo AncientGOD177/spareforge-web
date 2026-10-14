@@ -1,0 +1,93 @@
+---
+import SectionHead from '../ui/SectionHead.astro';
+import { HOME } from '../../i18n/home';
+import { BUILD } from '../../data/build';
+import { LINKS } from '../../site';
+import { homeAnchor, type Lang } from '../../i18n';
+
+interface Props { lang: Lang; headingLevel?: 'h1' | 'h2'; showFaqLink?: boolean }
+const { lang, showFaqLink = true, headingLevel = 'h2' } = Astro.props;
+const t = HOME[lang].alpha;
+const H = headingLevel === 'h1' ? 'h2' : 'h3';
+---
+<section id="alpha" class="l-section c-alpha" aria-labelledby="alpha-title">
+  <div class="c-alpha__glow" aria-hidden="true"></div>
+  <div class="l-container">
+    <SectionHead id="alpha-title" kicker={t.kicker} title={t.title} lead={t.lead} as={headingLevel}>
+      <p class="c-alpha__badge"><span class="c-chip c-chip--alpha">{t.badge(BUILD.version)}</span></p>
+    </SectionHead>
+
+    <ol class="c-quest">
+      {t.steps.map((s, i) => (
+        <li class="c-quest__step" data-reveal style={`--i:${i}`}>
+          <span class="c-quest__num" aria-hidden="true">{i + 1}</span>
+          <div class="c-quest__body">
+            <H class="c-quest__title">{s.title}</H>
+            <p class="c-quest__text" set:html={s.text} />
+            {i === 0 && (
+              <a class="p-btn p-btn--gold c-quest__cta" href={LINKS.discord} rel="noopener">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M13.5 3.2A12.6 12.6 0 0 0 10.4 2l-.4.8a11.6 11.6 0 0 0-4 0L5.6 2a12.6 12.6 0 0 0-3.1 1.2C.6 6.1 0 9 .3 11.8A12.7 12.7 0 0 0 4.1 13.7l.8-1.3a8.2 8.2 0 0 1-1.3-.6l.3-.3a9 9 0 0 0 8.2 0l.3.3a8.2 8.2 0 0 1-1.3.6l.8 1.3a12.7 12.7 0 0 0 3.8-1.9c.4-3.3-.6-6.1-2.2-8.6ZM5.4 10.2c-.8 0-1.4-.7-1.4-1.6S4.6 7 5.4 7s1.5.7 1.4 1.6c0 .9-.6 1.6-1.4 1.6Zm5.2 0c-.8 0-1.4-.7-1.4-1.6S9.8 7 10.6 7s1.5.7 1.4 1.6c0 .9-.6 1.6-1.4 1.6Z"/></svg>
+                {t.cta}
+              </a>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="c-expect" data-reveal>
+      <H class="c-expect__title">{t.expectTitle}</H>
+      <dl class="c-expect__list">
+        <div class="c-expect__row c-expect__row--ok"><dt><span class="c-expect__icon" aria-hidden="true"></span>{t.works}</dt><dd>{t.worksText}</dd></div>
+        <div class="c-expect__row c-expect__row--plan"><dt><span class="c-expect__icon" aria-hidden="true"></span>{t.planned}</dt><dd>{t.plannedText}</dd></div>
+        <div class="c-expect__row c-expect__row--warn"><dt><span class="c-expect__icon" aria-hidden="true"></span>{t.caveat}</dt><dd>{t.caveatText}</dd></div>
+      </dl>
+      {showFaqLink && <p class="c-expect__more"><a href={homeAnchor(lang, 'faq')}>{t.more} →</a></p>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-alpha { position: relative; overflow: clip; background: radial-gradient(90% 60% at 50% 100%, rgb(194 65 12 / 0.22), transparent 70%), var(--night-950); }
+  .c-alpha__glow { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ember-500), transparent); opacity: 0.6; }
+  .c-alpha__badge { margin: var(--sp-2) 0 0; }
+
+  .c-quest { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-4); counter-reset: q; position: relative; }
+  @media (min-width: 64rem) { .c-quest { grid-template-columns: repeat(3, 1fr); gap: var(--sp-6) var(--sp-5); } }
+  .c-quest__step {
+    position: relative; display: grid; grid-template-columns: auto 1fr; gap: var(--sp-4); align-items: start;
+    padding: var(--sp-5); background: var(--night-800);
+    box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink);
+  }
+  .c-quest__step:first-child { background: linear-gradient(135deg, var(--night-700), var(--night-800)); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold-500), 0 0 0 6px var(--ink), 0 0 40px -8px rgb(255 201 60 / 0.35); }
+  /* stepped connector between quest steps (vertical on mobile) */
+  .c-quest__step:not(:last-child)::after {
+    content: ''; position: absolute; left: calc(var(--sp-5) + 18px); bottom: -22px; width: 4px; height: 16px;
+    background: repeating-linear-gradient(var(--gold-500) 0 4px, transparent 4px 8px);
+  }
+  @media (min-width: 64rem) { .c-quest__step:not(:last-child)::after { display: none; } }
+  .c-quest__num {
+    display: grid; place-items: center; width: 40px; height: 40px;
+    font: 700 1.25rem/1 var(--font-display); color: var(--on-gold);
+    background: linear-gradient(var(--gold-200) 0 3px, var(--gold-300) 3px calc(100% - 4px), var(--gold-500) calc(100% - 4px));
+    box-shadow: 0 0 0 2px var(--bronze-900), 0 0 0 4px var(--ink);
+  }
+  .c-quest__body { display: grid; gap: var(--sp-2); justify-items: start; }
+  .c-quest__title { font-size: var(--fs-xl); color: var(--gold-100); }
+  .c-quest__text { margin: 0; color: var(--muted); }
+  .c-quest__text :global(b) { color: var(--text); }
+  .c-quest__text :global(code) { font: 400 0.8rem/1 var(--font-chip); padding: 3px 6px 2px; color: var(--gold-100); background: var(--ui-blue-700); box-shadow: 0 0 0 2px var(--ink); }
+  .c-quest__cta { margin-top: var(--sp-3); }
+
+  .c-expect { margin-top: var(--sp-7); padding: var(--sp-5) var(--sp-6); background: var(--night-900); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-700), 0 0 0 6px var(--ink); }
+  .c-expect__title { font: 400 0.8rem/1 var(--font-chip); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember-300); margin-bottom: var(--sp-4); }
+  .c-expect__list { margin: 0; display: grid; gap: var(--sp-4); }
+  @media (min-width: 64rem) { .c-expect__list { grid-template-columns: repeat(3, 1fr); gap: var(--sp-6); } }
+  .c-expect__row dt { display: flex; align-items: center; gap: 10px; font: 700 1.05rem/1.2 var(--font-display); color: var(--text); margin-bottom: 4px; }
+  .c-expect__row dd { margin: 0; color: var(--muted); }
+  .c-expect__icon { width: 12px; height: 12px; flex: none; box-shadow: 0 0 0 2px var(--ink); }
+  .c-expect__row--ok .c-expect__icon { background: var(--refine-10c); }
+  .c-expect__row--plan .c-expect__icon { background: var(--refine-5); }
+  .c-expect__row--warn .c-expect__icon { background: var(--ember-500); }
+  .c-expect__more { margin: var(--sp-5) 0 0; }
+</style>

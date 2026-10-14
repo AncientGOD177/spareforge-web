@@ -1,0 +1,193 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionHead from '../ui/SectionHead.astro';
+import { HOME } from '../../i18n/home';
+import { NOVICE, FIRST_JOBS, secondOf, JOB_CHANGE, type Job } from '../../data/jobs';
+import type { Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = HOME[lang].jobs;
+const portraits = import.meta.glob<{ default: ImageMetadata }>('../../assets/jobs/*.webp', { eager: true });
+const portrait = (id: string) => portraits[`../../assets/jobs/${id}.webp`]?.default;
+const other = lang === 'de' ? 'en' : 'de';
+const nameLine = (j: Job) => (j.name[lang] !== j.name[other] && lang === 'de' ? `${j.name.de} (${j.name.en})` : j.name[lang]);
+---
+<section id="classes" class="l-section l-section--alt c-jobs p-dither-top" aria-labelledby="classes-title" style="--dither-color: var(--night-900)">
+  <div class="l-container">
+    <SectionHead id="classes-title" kicker={t.kicker} title={t.title} lead={t.lead} center />
+
+    <div class="c-jobs__tree" data-jobs>
+      <div class="c-jobs__root" data-reveal>
+        <div class="c-jobs__portrait p-inset">
+          <Image src={portrait('novice')!} alt="" width={96} height={102} loading="lazy" />
+        </div>
+        <div>
+          <span class="c-chip">{t.novice}</span>
+          <p class="c-jobs__root-name">{nameLine(NOVICE)}</p>
+        </div>
+      </div>
+
+      <svg class="c-jobs__lines" viewBox="0 0 1200 72" preserveAspectRatio="none" aria-hidden="true" shape-rendering="crispEdges">
+        <path d="M600 0V32M100 32H1100M100 32V72M300 32V72M500 32V72M700 32V72M900 32V72M1100 32V72" />
+      </svg>
+      <p class="c-jobs__step-note" aria-hidden="true"><span class="c-chip">{t.first} · {t.at(JOB_CHANGE.first)}</span></p>
+
+      <div class="c-jobs__tabs" role="tablist" aria-label={t.tabsLabel} data-tablist>
+        {FIRST_JOBS.map((j, i) => (
+          <button
+            class="c-jobs__tab"
+            role="tab"
+            type="button"
+            id={`tab-${j.id}`}
+            aria-controls={`panel-${j.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            style={`--job: ${j.color}`}
+          >
+            <span class="c-jobs__gem" aria-hidden="true"></span>
+            <span class="c-jobs__tab-name">{j.name[lang]}</span>
+            <span class="c-jobs__tab-next" aria-hidden="true">→ {secondOf(j.id).name[lang]}</span>
+          </button>
+        ))}
+      </div>
+
+      {FIRST_JOBS.map((j, i) => {
+        const s = secondOf(j.id);
+        return (
+          <div class="c-jobs__panel" role="tabpanel" id={`panel-${j.id}`} aria-labelledby={`tab-${j.id}`} hidden={i !== 0} tabindex="0" style={`--job: ${j.color}; --job2: ${s.color}`}>
+            <article class="c-job c-job--first">
+              <p class="c-job__tier"><span class="c-chip">{t.first} · {t.at(JOB_CHANGE.first)}</span></p>
+              <h3 class="c-job__name"><span class="c-jobs__gem" aria-hidden="true"></span>{nameLine(j)}</h3>
+              <p class="c-job__role">{j.role[lang]}</p>
+              <dl class="c-job__facts">
+                <div><dt>{t.weapons}</dt><dd>{j.weapons[lang].join(' · ')}</dd></div>
+                <div><dt>{t.skills}</dt><dd>{j.skills[lang].join(' · ')}</dd></div>
+              </dl>
+              <p class="c-job__guide"><span>{t.guide}:</span> {j.note[lang]}</p>
+            </article>
+            <div class="c-job__arrow" aria-hidden="true">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges"><path fill="currentColor" d="M2 7h7V4h1v1h1v1h1v1h1v2h-1v1h-1v1h-1v1H9V9H2z" /></svg>
+              <span>{t.at(JOB_CHANGE.second)}</span>
+            </div>
+            <article class="c-job c-job--second p-refine">
+              <div class="c-job__portrait p-inset">
+                <Image src={portrait(s.id)!} alt={lang === 'de' ? `${s.name.de} im Charakterauswahl-Bildschirm des Spiels` : `${s.name.en} on the game's character select screen`} width={160} height={170} loading="lazy" />
+              </div>
+              <div class="c-job__body">
+                <p class="c-job__tier"><span class="c-chip c-chip--gold">{t.second} · {t.at(JOB_CHANGE.second)}</span></p>
+                <h3 class="c-job__name"><span class="c-jobs__gem c-jobs__gem--2" aria-hidden="true"></span>{nameLine(s)}</h3>
+                <p class="c-job__role">{s.role[lang]}</p>
+                <dl class="c-job__facts">
+                  <div><dt>{t.weapons}</dt><dd>{s.weapons[lang].join(' · ')}</dd></div>
+                  <div><dt>{t.skills}</dt><dd>{s.skills[lang].join(' · ')}</dd></div>
+                </dl>
+                <p class="c-job__guide"><span>{t.guide}:</span> {s.note[lang]}</p>
+              </div>
+            </article>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-jobs__tree { display: grid; justify-items: center; }
+  .c-jobs__root { display: flex; align-items: center; gap: var(--sp-4); padding: 10px 20px 10px 10px; background: var(--night-800); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold-600), 0 0 0 6px var(--ink); }
+  .c-jobs__portrait { width: 88px; aspect-ratio: 1; overflow: hidden; background: var(--ui-blue-900); }
+  .c-jobs__portrait :global(img) { width: 100%; height: 100%; object-fit: cover; image-rendering: auto; }
+  .c-jobs__root-name { margin: 6px 0 0; font: 700 var(--fs-xl)/1 var(--font-display); color: var(--gold-100); }
+
+  .c-jobs__lines { display: none; width: 100%; height: 72px; overflow: visible; }
+  .c-jobs__lines path { fill: none; stroke: var(--gold-500); stroke-width: 4; vector-effect: non-scaling-stroke; filter: drop-shadow(0 2px 0 var(--ink)); stroke-dasharray: 2400; stroke-dashoffset: 0; }
+  :global(html.motion-ok) .c-jobs__tree:not(.is-drawn) .c-jobs__lines path { stroke-dashoffset: 2400; }
+  :global(html.motion-ok) .c-jobs__tree.is-drawn .c-jobs__lines path { transition: stroke-dashoffset 900ms steps(12); }
+  .c-jobs__step-note { margin: var(--sp-4) 0; }
+
+  .c-jobs__tabs { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
+  @media (min-width: 40rem) { .c-jobs__tabs { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 64rem) {
+    .c-jobs__lines { display: block; margin-top: var(--sp-4); }
+    .c-jobs__step-note { display: none; }
+    .c-jobs__tabs { grid-template-columns: repeat(6, 1fr); gap: var(--sp-4); }
+  }
+  .c-jobs__tab {
+    position: relative; display: grid; justify-items: center; gap: 4px; min-height: 64px; padding: 12px 8px; cursor: pointer;
+    background: var(--ui-blue-800); color: var(--muted); border: 0; text-align: center;
+    box-shadow: inset 0 0 0 2px var(--ui-blue-700), 0 0 0 2px var(--ink);
+    transition: background var(--t-micro) var(--ease-out), color var(--t-micro) var(--ease-out), transform var(--t-micro) var(--ease-out);
+  }
+  .c-jobs__tab:hover { color: var(--gold-100); background: var(--ui-blue-700); }
+  .c-jobs__tab[aria-selected='true'] {
+    color: var(--on-gold);
+    background: linear-gradient(var(--gold-200) 0 3px, var(--gold-300) 3px calc(100% - 5px), var(--gold-500) calc(100% - 5px));
+    box-shadow: 0 0 0 2px var(--bronze-900), 0 0 0 4px var(--ink), 0 0 26px -4px rgb(255 201 60 / 0.6);
+    transform: translateY(-2px);
+  }
+  .c-jobs__tab-name { font: 700 1.1rem/1.1 var(--font-display); }
+  .c-jobs__tab-next { font: 400 0.62rem/1.2 var(--font-chip); letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.85; }
+  .c-jobs__gem { display: inline-block; width: 10px; height: 10px; flex: none; background: var(--job); box-shadow: 0 0 0 2px var(--ink), inset -2px -2px 0 rgb(0 0 0 / 0.3), inset 2px 2px 0 rgb(255 255 255 / 0.35); }
+  .c-jobs__gem--2 { background: var(--job2); }
+
+  .c-jobs__panel {
+    width: 100%; margin-top: var(--sp-6);
+    display: grid; gap: var(--sp-4); align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+  .c-jobs__panel[hidden] { display: none; }
+  :global(html:not(.js)) .c-jobs__panel[hidden] { display: grid; }
+  :global(html:not(.js)) .c-jobs__tabs { display: none; }
+  @media (min-width: 64rem) { .c-jobs__panel { grid-template-columns: 1fr auto 1.35fr; } }
+  :global(html.motion-ok) .c-jobs__panel:not([hidden]) { animation: panel-in 260ms var(--ease-out); }
+  @keyframes panel-in { from { opacity: 0; transform: translateY(6px); } }
+
+  .c-job { position: relative; padding: var(--sp-5); background: var(--night-800); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink); display: grid; gap: var(--sp-3); align-content: start; }
+  .c-job--second { display: grid; grid-template-columns: 1fr; gap: var(--sp-5); background: linear-gradient(135deg, var(--night-700), var(--night-800) 60%); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold-600), 0 0 0 6px var(--ink); }
+  @media (min-width: 40rem) { .c-job--second { grid-template-columns: 168px 1fr; } }
+  .c-job__body { display: grid; gap: var(--sp-3); align-content: start; }
+  .c-job__portrait { width: 168px; aspect-ratio: 160 / 170; background: var(--ui-blue-900); overflow: hidden; justify-self: center; }
+  .c-job__portrait :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .c-job__tier { margin: 0; }
+  .c-job__name { display: flex; align-items: center; gap: 12px; font-size: var(--fs-2xl); color: var(--gold-100); }
+  .c-job__role { margin: 0; font-weight: 700; color: var(--text); font-size: var(--fs-lg); }
+  .c-job__facts { margin: 0; display: grid; gap: var(--sp-2); }
+  .c-job__facts div { display: grid; gap: 2px; }
+  .c-job__facts dt { font: 400 0.7rem/1.2 var(--font-chip); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ember-300); }
+  .c-job__facts dd { margin: 0; color: var(--text); }
+  .c-job__guide { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+  .c-job__guide span { color: var(--faint); }
+  .c-job__arrow { display: grid; justify-items: center; align-content: center; gap: 6px; color: var(--gold-300); font: 400 0.68rem/1.2 var(--font-chip); text-transform: uppercase; letter-spacing: 0.06em; }
+  .c-job__arrow svg { width: 32px; height: 32px; rotate: 90deg; filter: drop-shadow(0 2px 0 var(--ink)); }
+  @media (min-width: 64rem) { .c-job__arrow svg { rotate: 0deg; } }
+</style>
+
+<script>
+  // WAI-ARIA tabs: arrow keys move and activate, Home/End jump. Without JS every panel is shown as a list.
+  const tree = document.querySelector<HTMLElement>('[data-jobs]');
+  const list = tree?.querySelector<HTMLElement>('[data-tablist]');
+  if (tree && list) {
+    const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const select = (tab: HTMLButtonElement, focus = true) => {
+      for (const t of tabs) {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')!)!.hidden = !on;
+      }
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab, false));
+      tab.addEventListener('keydown', (e) => {
+        const map: Record<string, number> = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: tabs.length - 1 };
+        if (!(e.key in map)) return;
+        e.preventDefault();
+        select(tabs[(map[e.key] + tabs.length) % tabs.length]);
+      });
+    });
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { tree.classList.add('is-drawn'); io.disconnect(); } }, { threshold: 0.5 });
+    io.observe(tree.querySelector('.c-jobs__tabs')!);
+  }
+</script>

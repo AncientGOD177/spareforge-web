@@ -1,0 +1,110 @@
+---
+import SectionHead from '../ui/SectionHead.astro';
+import VideoFacade from './VideoFacade.astro';
+import { HOME } from '../../i18n/home';
+import { TRAILER, SHORTS } from '../../data/videos';
+import type { Lang } from '../../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = HOME[lang].videos;
+const close = lang === 'de' ? 'Schließen' : 'Close';
+---
+<section id="videos" class="l-section c-show" aria-labelledby="videos-title">
+  <div class="l-container">
+    <SectionHead id="videos-title" kicker={t.kicker} title={t.title} lead={t.lead} />
+    <div class="c-show__featured">
+      <VideoFacade video={TRAILER} lang={lang} sizes="(min-width: 80rem) 1200px, 94vw" widths={[640, 960, 1280, 1920]} />
+    </div>
+    <h3 class="c-show__rail-title">{t.shortsLabel}</h3>
+    <div class="c-show__rail" role="list">
+      {SHORTS.map((v) => (
+        <div role="listitem" class="c-show__item">
+          <VideoFacade video={v} lang={lang} vertical sizes="(min-width: 64rem) 280px, (min-width: 40rem) 40vw, 68vw" widths={[360, 540, 720]} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Trailer dialog for the hero's "Watch the trailer" button. Same files as the facade above, loaded on open. -->
+  <dialog class="c-tdlg" aria-label={TRAILER.title[lang]} data-trailer-dialog data-sources={JSON.stringify(TRAILER.sources)}>
+    <div class="c-tdlg__inner">
+      <button class="c-tdlg__close" type="button" data-trailer-close>
+        <svg viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M1 1h1v1h1v1h2V2h1V1h1v1H6v1H5v2h1v1h1v1H6V6H5V5H3v1H2v1H1V6h1V5h1V3H2V2H1z" /></svg>
+        <span class="u-sr">{close}</span>
+      </button>
+      <div class="c-tdlg__frame" data-trailer-slot></div>
+    </div>
+  </dialog>
+</section>
+
+<style>
+  .c-show { background: var(--night-950); }
+  .c-show__featured { max-width: 1200px; }
+  .c-show__rail-title { margin: var(--sp-8) 0 var(--sp-5); font: 400 0.8rem/1 var(--font-chip); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember-300); }
+  .c-show__rail {
+    display: grid; grid-auto-flow: column; grid-auto-columns: min(68vw, 280px); gap: var(--sp-5);
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    padding: 8px 8px var(--sp-4); margin: -8px -8px 0; scrollbar-width: thin;
+  }
+  .c-show__item { scroll-snap-align: start; }
+  @media (min-width: 64rem) {
+    .c-show__rail { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); grid-auto-columns: auto; overflow: visible; }
+  }
+
+  .c-tdlg { width: min(1280px, 100% - 2 * var(--gutter)); max-width: none; max-height: none; padding: 0; border: 0; background: transparent; overflow: visible; }
+  .c-tdlg::backdrop { background: rgb(7 4 24 / 0.92); }
+  :global(html.motion-ok) .c-tdlg[open] { animation: dlg-in 260ms var(--ease-out); }
+  @keyframes dlg-in { from { opacity: 0; transform: scale(0.97); } }
+  .c-tdlg__inner { position: relative; }
+  .c-tdlg__frame { aspect-ratio: 16 / 9; background: var(--ink); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--gold-500), 0 0 0 6px var(--ink); }
+  .c-tdlg__frame :global(video) { width: 100%; height: 100%; display: block; }
+  .c-tdlg__close { position: absolute; right: 0; top: -56px; width: 48px; height: 48px; display: grid; place-items: center; cursor: pointer; border: 0; color: var(--text); background: var(--alpha-700); box-shadow: inset 0 0 0 2px var(--alpha-500), 0 0 0 2px var(--ink); }
+  .c-tdlg__close svg { width: 14px; height: 14px; }
+</style>
+
+<script>
+  // Click-to-play facades: no video byte is requested before the click. One video plays at a time.
+  type Src = { src: string; type: string; media?: string };
+
+  function makeVideo(sources: Src[]) {
+    const v = document.createElement('video');
+    v.controls = true; v.playsInline = true; v.preload = 'auto'; v.autoplay = true;
+    v.setAttribute('playsinline', '');
+    const small = matchMedia('(max-width: 900px)').matches;
+    // <source media> is ignored for <video> in some browsers, so pick the right file here.
+    const list = sources.filter((s) => !s.media || (small && matchMedia(s.media).matches));
+    for (const s of (list.length ? list : sources)) { const el = document.createElement('source'); el.src = s.src; el.type = s.type; v.append(el); }
+    v.addEventListener('play', () => document.querySelectorAll('video[controls]').forEach((o) => { if (o !== v) (o as HTMLVideoElement).pause(); }));
+    return v;
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-video]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const v = makeVideo(JSON.parse(btn.dataset.video ?? '[]'));
+      v.setAttribute('aria-label', btn.getAttribute('aria-label') ?? '');
+      btn.replaceWith(v);
+      v.focus();
+      v.play().catch(() => {});
+    });
+  });
+
+  const dlg = document.querySelector<HTMLDialogElement>('[data-trailer-dialog]');
+  const slot = dlg?.querySelector<HTMLElement>('[data-trailer-slot]');
+  let opener: HTMLElement | null = null;
+  document.querySelectorAll<HTMLElement>('[data-open-trailer]').forEach((b) => b.addEventListener('click', () => {
+    if (!dlg || !slot) return;
+    opener = b;
+    slot.replaceChildren(makeVideo(JSON.parse(dlg.dataset.sources ?? '[]')));
+    dlg.showModal();
+    document.documentElement.classList.add('is-locked');
+    (slot.querySelector('video') as HTMLVideoElement).play().catch(() => {});
+  }));
+  dlg?.querySelector('[data-trailer-close]')?.addEventListener('click', () => dlg.close());
+  dlg?.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  dlg?.addEventListener('close', () => {
+    slot?.replaceChildren();
+    document.documentElement.classList.remove('is-locked');
+    opener?.focus();
+  });
+</script>

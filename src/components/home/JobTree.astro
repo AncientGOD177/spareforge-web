@@ -11,12 +11,11 @@ const { lang } = Astro.props;
 const t = HOME[lang].jobs;
 const portraits = import.meta.glob<{ default: ImageMetadata }>('../../assets/jobs/*.webp', { eager: true });
 const portrait = (id: string) => portraits[`../../assets/jobs/${id}.webp`]?.default;
-const other = lang === 'de' ? 'en' : 'de';
-const nameLine = (j: Job) => (j.name[lang] !== j.name[other] && lang === 'de' ? `${j.name.de} (${j.name.en})` : j.name[lang]);
+const nameLine = (j: Job) => j.name[lang];
 ---
 <section id="classes" class="l-section l-section--alt c-jobs p-dither-top" aria-labelledby="classes-title" style="--dither-color: var(--night-900)">
   <div class="l-container">
-    <SectionHead id="classes-title" kicker={t.kicker} title={t.title} lead={t.lead} center />
+    <SectionHead id="classes-title" kicker={t.kicker} title={t.title} lead={t.lead} />
 
     <div class="c-jobs__tree" data-jobs>
       <div class="c-jobs__root" data-reveal>
@@ -127,7 +126,7 @@ const nameLine = (j: Job) => (j.name[lang] !== j.name[other] && lang === 'de' ? 
     transform: translateY(-2px);
   }
   .c-jobs__tab-name { font: 700 1.1rem/1.1 var(--font-display); }
-  .c-jobs__tab-next { font: 400 0.62rem/1.2 var(--font-chip); letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.85; }
+  .c-jobs__tab-next { font: 400 0.75rem/1.2 var(--font-chip); letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.85; }
   .c-jobs__gem { display: inline-block; width: 10px; height: 10px; flex: none; background: var(--job); box-shadow: 0 0 0 2px var(--ink), inset -2px -2px 0 rgb(0 0 0 / 0.3), inset 2px 2px 0 rgb(255 255 255 / 0.35); }
   .c-jobs__gem--2 { background: var(--job2); }
 
@@ -154,11 +153,11 @@ const nameLine = (j: Job) => (j.name[lang] !== j.name[other] && lang === 'de' ? 
   .c-job__role { margin: 0; font-weight: 700; color: var(--text); font-size: var(--fs-lg); }
   .c-job__facts { margin: 0; display: grid; gap: var(--sp-2); }
   .c-job__facts div { display: grid; gap: 2px; }
-  .c-job__facts dt { font: 400 0.7rem/1.2 var(--font-chip); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ember-300); }
+  .c-job__facts dt { font: 400 0.75rem/1.2 var(--font-chip); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ember-300); }
   .c-job__facts dd { margin: 0; color: var(--text); }
   .c-job__guide { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
   .c-job__guide span { color: var(--faint); }
-  .c-job__arrow { display: grid; justify-items: center; align-content: center; gap: 6px; color: var(--gold-300); font: 400 0.68rem/1.2 var(--font-chip); text-transform: uppercase; letter-spacing: 0.06em; }
+  .c-job__arrow { display: grid; justify-items: center; align-content: center; gap: 6px; color: var(--gold-300); font: 400 0.75rem/1.2 var(--font-chip); text-transform: uppercase; letter-spacing: 0.06em; }
   .c-job__arrow svg { width: 32px; height: 32px; rotate: 90deg; filter: drop-shadow(0 2px 0 var(--ink)); }
   @media (min-width: 64rem) { .c-job__arrow svg { rotate: 0deg; } }
 </style>

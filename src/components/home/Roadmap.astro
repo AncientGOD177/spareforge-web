@@ -15,15 +15,17 @@ const fmt = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'n
 const slug = (id: string) => id.split('/').pop();
 ---
 <section id="roadmap" class="l-section l-section--alt c-road p-dither-top" aria-labelledby="roadmap-title" style="--dither-color: var(--night-900)">
+  <div class="l-container">
+    <SectionHead id="roadmap-title" kicker={t.kicker} title={t.title} lead={t.lead} />
+  </div>
   <div class="l-container c-road__grid">
     <div>
-      <SectionHead id="roadmap-title" kicker={t.kicker} title={t.title} lead={t.lead} />
       <ol class="c-track">
         <li class="c-track__stage c-track__stage--now" data-reveal>
           <h3 class="c-track__label"><span class="c-track__dot" aria-hidden="true"></span>{t.now}</h3>
           {r.now.map((v) => (
             <div class="c-track__ver">
-              <span class="c-chip c-chip--gold">v{v.v}</span>
+              <span class="c-chip c-chip--gold c-chip--ver">v{v.v}</span>
               <ul>{v.items.map((x) => <li>{x}</li>)}</ul>
             </div>
           ))}
@@ -59,7 +61,10 @@ const slug = (id: string) => id.split('/').pop();
 
 <style>
   .c-road__grid { display: grid; gap: var(--sp-8); }
-  @media (min-width: 64rem) { .c-road__grid { grid-template-columns: 1.1fr 0.9fr; align-items: start; } }
+  @media (min-width: 64rem) {
+    .c-road__grid { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
+    .c-devlog { position: sticky; top: 112px; }
+  }
 
   .c-track { list-style: none; margin: 0; padding: 0 0 0 28px; position: relative; display: grid; gap: var(--sp-6); }
   .c-track::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 4px; background: repeating-linear-gradient(var(--gold-600) 0 8px, transparent 8px 12px); }
@@ -81,7 +86,7 @@ const slug = (id: string) => id.split('/').pop();
   .c-devlog__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-4); width: 100%; }
   .c-devlog__card { display: grid; gap: 6px; padding: var(--sp-4) var(--sp-5); text-decoration: none; background: var(--night-800); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink); }
   .c-devlog__card:hover { background: var(--night-700); }
-  .c-devlog__meta { font: 400 0.68rem/1 var(--font-chip); color: var(--faint); letter-spacing: 0.04em; text-transform: uppercase; }
+  .c-devlog__meta { font: 400 0.75rem/1.2 var(--font-chip); color: var(--faint); letter-spacing: 0.04em; }
   .c-devlog__name { font: 700 1.15rem/1.25 var(--font-display); color: var(--gold-100); }
   .c-devlog__sum { color: var(--muted); font-size: var(--fs-sm); }
 </style>

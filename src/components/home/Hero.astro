@@ -44,7 +44,7 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
       </a>
       <button class="p-btn p-btn--game c-hero__trailer" type="button" data-open-trailer>
         <svg viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M1 1h6v6H1zM2 2v4h4V2zM3 3h1v1h1v1H4v1H3z" /></svg>
-        {t.trailer} <span class="c-hero__dur" aria-hidden="true">1:21</span>
+        {t.trailer} <span class="c-hero__dur" aria-hidden="true">1:20</span>
       </button>
     </div>
     <ul class="c-hero__chips" aria-label={lang === 'de' ? 'Auf einen Blick' : 'At a glance'}>
@@ -52,10 +52,11 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
     </ul>
   </div>
 
-  <button class="c-hero__pause" type="button" hidden data-hero-pause data-label-pause={t.pause} data-label-play={t.play} aria-pressed="false">
+  <!-- One control for all ambient motion: background video, embers and the pillar loops (WCAG 2.2.2). -->
+  <button class="c-hero__pause" type="button" hidden data-hero-pause aria-pressed="false">
     <svg class="i-pause" viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M2 1h1v6H2zM5 1h1v6H5z" /></svg>
     <svg class="i-play" viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M2 1h1v1h1v1h1v1h1v1H5v1H4v1H3v1H2z" /></svg>
-    <span class="u-sr" data-hero-pause-label>{t.pause}</span>
+    <span class="u-sr">{t.pause}</span>
   </button>
 </section>
 
@@ -93,7 +94,7 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
     padding-block: clamp(96px, 16vh, 180px) clamp(56px, 9vh, 96px);
     display: grid; justify-items: center; text-align: center; gap: var(--sp-5);
   }
-  .c-hero__title { margin: 0; }
+  .c-hero__title { margin: 0; font-size: 0; line-height: 0; } /* the visible title is the logo image; no font-dependent line box */
   .c-hero__logo { position: relative; display: block; width: min(88vw, 620px); }
   .c-hero__logo img { width: 100%; height: auto; filter: drop-shadow(0 6px 0 var(--ink)) drop-shadow(0 18px 40px rgb(7 4 24 / 0.8)); }
   /* One specular sweep across the gold, masked by the logo's own alpha */
@@ -114,7 +115,7 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
   .c-hero__ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-4); margin-top: var(--sp-2); }
   .c-hero__join { --btn-h: 58px; font-size: 1.15rem; padding: 0 28px; }
   .c-hero__trailer { --btn-h: 58px; }
-  .c-hero__dur { font: 400 0.7rem/1 var(--font-chip); color: var(--gold-100); padding: 3px 5px 2px; background: var(--ink); }
+  .c-hero__dur { font: 400 0.75rem/1 var(--font-chip); color: var(--gold-100); padding: 3px 5px 2px; background: var(--ink); }
   .c-hero__chips { list-style: none; margin: var(--sp-2) 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 
   .c-hero__pause {
@@ -130,7 +131,8 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
   .c-hero__pause[aria-pressed='true'] .i-pause { display: none; }
 
   @media (min-width: 64rem) {
-    .c-hero__content { justify-items: start; text-align: left; padding-block: 120px clamp(72px, 12vh, 128px); }
+    .c-hero { min-height: clamp(600px, calc(100svh - 100px), 820px); align-items: center; }
+    .c-hero__content { justify-items: start; text-align: left; padding-block: 64px 72px; }
     .c-hero__logo { width: min(46vw, 640px); margin-left: -12px; }
     .c-hero__ctas, .c-hero__chips { justify-content: flex-start; }
     .c-hero__tagline { max-width: 34ch; }
@@ -143,11 +145,20 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
     }
   }
   @media (max-width: 40rem) {
-    .c-hero { min-height: clamp(560px, calc(100svh - 100px), 760px); }
-    .c-hero__content { padding-block: 72px 56px; gap: var(--sp-4); }
+    .c-hero { min-height: clamp(600px, calc(100svh - 72px), 780px); align-items: start; }
+    .c-hero__media { bottom: auto; height: min(56vh, 420px); }
+    .c-hero__media::after { display: none; }
+    .c-hero__media :global(img), .c-hero__media :global(video) { object-position: 64% 30%; }
+    .c-hero__scrim {
+      background:
+        radial-gradient(130% 80% at 60% 20%, transparent 35%, rgb(7 4 24 / 0.6) 100%),
+        linear-gradient(to bottom, rgb(11 7 32 / 0.3) 0%, transparent 16%, transparent 50%, rgb(11 7 32 / 0.75) 78%, var(--night-950) 100%);
+    }
+    .c-hero__embers { top: auto; height: 40%; bottom: 0; }
+    .c-hero__content { padding-block: calc(min(56vh, 420px) - 96px) 48px; gap: var(--sp-4); }
+    .c-hero__logo { width: min(84vw, 360px); }
     .c-hero__ctas { width: 100%; flex-direction: column; align-items: stretch; }
     .c-hero__ctas > * { width: 100%; }
-    .c-hero__media :global(img), .c-hero__media :global(video) { object-position: 70% 35%; }
     .c-hero__pause { bottom: auto; top: 16px; }
   }
 </style>
@@ -155,18 +166,24 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
 <script>
   import { skipHeavyMedia, motionOk } from '../../lib/motion';
   import { startEmbers } from '../../lib/embers';
+  import { setAmbientPaused, ambientPaused } from '../../lib/ambient';
 
   const hero = document.querySelector<HTMLElement>('[data-hero]');
   const slot = hero?.querySelector<HTMLElement>('[data-hero-slot]');
   const pauseBtn = hero?.querySelector<HTMLButtonElement>('[data-hero-pause]');
+  const canvas = hero?.querySelector<HTMLCanvasElement>('[data-embers]');
   let video: HTMLVideoElement | null = null;
-  let userPaused = false;
+  let stopEmbers: (() => void) | null = null;
   let inView = true;
 
   function syncPlayback() {
-    if (!video) return;
-    if (userPaused || !inView || document.hidden || !motionOk()) video.pause();
-    else video.play().catch(() => {});
+    if (video) {
+      if (ambientPaused() || !inView || document.hidden || !motionOk()) video.pause();
+      else video.play().catch(() => {});
+    }
+    const wantEmbers = !ambientPaused() && motionOk();
+    if (!wantEmbers && stopEmbers) { stopEmbers(); stopEmbers = null; }
+    if (wantEmbers && !stopEmbers && canvas && hero) stopEmbers = startEmbers(canvas, hero);
   }
 
   function mountVideo() {
@@ -177,9 +194,8 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
     video.setAttribute('muted', ''); video.setAttribute('playsinline', ''); video.setAttribute('aria-hidden', 'true'); video.tabIndex = -1;
     for (const s of set) { const el = document.createElement('source'); el.src = s.src; el.type = s.type; video.append(el); }
     video.addEventListener('playing', () => video?.classList.add('is-playing'), { once: true });
-    video.addEventListener('error', () => { video?.remove(); video = null; pauseBtn && (pauseBtn.hidden = true); }, true);
+    video.addEventListener('error', () => { video?.remove(); video = null; }, true);
     slot.append(video);
-    if (pauseBtn) pauseBtn.hidden = false;
     syncPlayback();
   }
 
@@ -188,26 +204,27 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
     if (document.readyState === 'complete') idle(mountVideo);
     else addEventListener('load', () => idle(mountVideo), { once: true });
 
-    new IntersectionObserver(([e]) => { inView = e.isIntersecting; syncPlayback(); }).observe(hero);
+    new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (video) syncPlayback(); }).observe(hero);
     document.addEventListener('visibilitychange', syncPlayback);
 
+    if (pauseBtn && motionOk()) pauseBtn.hidden = false;
     pauseBtn?.addEventListener('click', () => {
-      userPaused = !userPaused;
-      pauseBtn.setAttribute('aria-pressed', String(userPaused));
-      const label = pauseBtn.querySelector('[data-hero-pause-label]');
-      if (label) label.textContent = userPaused ? pauseBtn.dataset.labelPlay! : pauseBtn.dataset.labelPause!;
+      const paused = !ambientPaused();
+      setAmbientPaused(paused);
+      pauseBtn.setAttribute('aria-pressed', String(paused));
       syncPlayback();
     });
-
-    const canvas = hero.querySelector<HTMLCanvasElement>('[data-embers]');
-    const stopEmbers = canvas ? startEmbers(canvas, hero) : null;
+    syncPlayback();
 
     addEventListener('sf:motion', ((e: CustomEvent<{ reduce: boolean }>) => {
       if (e.detail.reduce) {
-        video?.remove(); video = null; if (pauseBtn) pauseBtn.hidden = true; stopEmbers?.();
+        video?.remove(); video = null;
+        if (pauseBtn) pauseBtn.hidden = true;
+        syncPlayback();
       } else {
+        if (pauseBtn) pauseBtn.hidden = false;
         mountVideo();
-        if (canvas) startEmbers(canvas, hero);
+        syncPlayback();
       }
     }) as EventListener);
   }

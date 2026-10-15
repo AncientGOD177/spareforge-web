@@ -15,6 +15,15 @@ interface Props {
 }
 const { lang, route, title, heading, description, kicker, updated, noindex, alternates } = Astro.props;
 const updatedLabel = lang === 'de' ? 'Stand' : 'Last updated';
+// Long legal texts get a sticky table of contents built from their h2 headings.
+const raw = await Astro.slots.render('default');
+const toc: { id: string; text: string }[] = [];
+const body = raw.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/g, (_m: string, attrs: string, inner: string) => {
+  const id = `s${toc.length + 1}`;
+  toc.push({ id, text: inner.replace(/<[^>]+>/g, '') });
+  return `<h2${attrs} id="${id}">${inner}</h2>`;
+});
+const showToc = !Astro.slots.has('aside') && toc.length >= 5;
 ---
 <Base lang={lang} route={route} title={title} description={description} noindex={noindex} alternates={alternates}>
   <article class="c-prose-page">
@@ -26,10 +35,14 @@ const updatedLabel = lang === 'de' ? 'Stand' : 'Last updated';
       </div>
     </header>
     <div class="l-container c-prose-page__body">
-      <div class="c-prose">
-        <slot />
-      </div>
+      <div class="c-prose" set:html={body} />
       <slot name="aside" />
+      {showToc && (
+        <nav class="c-toc" aria-label={lang === 'de' ? 'Inhalt' : 'Contents'}>
+          <p class="c-toc__title">{lang === 'de' ? 'Inhalt' : 'Contents'}</p>
+          <ol>{toc.map((x) => <li><a href={`#${x.id}`}>{x.text}</a></li>)}</ol>
+        </nav>
+      )}
     </div>
   </article>
 </Base>
@@ -43,6 +56,15 @@ const updatedLabel = lang === 'de' ? 'Stand' : 'Last updated';
   @media (min-width: 64rem) { .c-prose-page__body:has(> :nth-child(2)) { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; } }
 
   .c-prose { max-width: 72ch; min-width: 0; overflow-wrap: anywhere; }
+  .c-prose :global(h2) { scroll-margin-top: 96px; }
+  .c-toc { display: none; }
+  @media (min-width: 64rem) {
+    .c-toc { display: block; position: sticky; top: 104px; order: 2; padding: var(--sp-4) var(--sp-5); background: var(--night-900); box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-700), 0 0 0 6px var(--ink); }
+    .c-toc__title { margin: 0 0 var(--sp-3); font: 400 0.8rem/1 var(--font-chip); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ember-300); }
+    .c-toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+    .c-toc a { display: flex; align-items: center; min-height: 32px; color: var(--muted); text-decoration: none; font-size: var(--fs-sm); }
+    .c-toc a:hover { color: var(--gold-100); text-decoration: underline; }
+  }
   .c-prose :global(h2) { font: 700 var(--fs-xl)/1.2 var(--font-display); color: var(--gold-100); margin: var(--sp-7) 0 var(--sp-3); padding-top: var(--sp-2); }
   .c-prose :global(h2:first-child) { margin-top: 0; }
   .c-prose :global(h3) { font: 700 var(--fs-lg)/1.3 var(--font-display); color: var(--text); margin: var(--sp-5) 0 var(--sp-2); }

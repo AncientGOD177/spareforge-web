@@ -143,8 +143,9 @@ const hasKey = WEB3FORMS_KEY.trim().length > 0;
       btn.disabled = true; btn.textContent = btn.dataset.sending!;
       try {
         const res = await fetch(form.dataset.endpoint!, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok || json.success === false) throw new Error('send failed');
+        const json = (await res.json().catch(() => null)) as { success?: unknown } | null;
+        // Success only on an explicit { success: true }: an empty, non-JSON or unexpected body is a failure.
+        if (!res.ok || json?.success !== true) throw new Error('send failed');
         form.reset();
         status.classList.add('is-ok'); status.textContent = status.dataset.ok!;
       } catch {

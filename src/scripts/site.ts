@@ -60,6 +60,7 @@ if (motionOk() && 'IntersectionObserver' in window) {
     for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
   }, { rootMargin: '0px 0px -8% 0px' });
   reveals.forEach((el) => io.observe(el));
+  root.classList.add('reveal-on'); // opt in to the hidden start state only now that the observer exists
 } else {
   reveals.forEach((el) => el.classList.add('is-in'));
 }

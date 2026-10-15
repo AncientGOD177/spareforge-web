@@ -38,18 +38,24 @@ const t = HOME[lang].pillars;
 
 <style>
   .c-pillars { background: var(--night-950); }
-  .c-pillars__grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-5); grid-template-columns: 1fr; }
-  @media (min-width: 40rem) { .c-pillars__grid { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 64rem) { .c-pillars__grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-6); } }
+  /* minmax(0, 1fr), never bare 1fr: a bare 1fr track sizes to the card's min-content width, and WebKit
+     (iOS Safari, every iOS browser) resolves the 16:9 media box + 100%-height poster into a runaway
+     min-content width (3000-5000 px cards, page 30 000 px tall and sideways-scrolling on iPhone). */
+  .c-pillars__grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-5); grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 40rem) { .c-pillars__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .c-pillars__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-6); } }
   .c-pillar {
-    display: flex; flex-direction: column;
+    min-width: 0; display: flex; flex-direction: column;
     background: linear-gradient(180deg, var(--night-800), var(--night-900));
     box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--night-600), 0 0 0 6px var(--ink), 0 14px 30px -12px rgb(0 0 0 / 0.6);
   }
-  .c-pillar__media { aspect-ratio: 16 / 9; overflow: hidden; background: var(--ink); margin: 10px 10px 0; }
-  .c-pillar__media :global(img), .c-pillar__media :global(video) { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .c-pillar__media { position: relative; }
-  .c-pillar__media :global(video) { position: absolute; inset: 0; opacity: 0; transition: opacity 300ms var(--ease-out); }
+  /* Fixed 16:9 box. Poster and loop are both taken out of flow, so neither their intrinsic size nor the
+     poster-to-video swap can ever feed back into the card's width or height (no growth, no layout shift). */
+  .c-pillar__media { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--ink); margin: 10px 10px 0; contain: layout paint; }
+  .c-pillar__media :global(picture), .c-pillar__media :global(img), .c-pillar__media :global(video) {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .c-pillar__media :global(video) { opacity: 0; transition: opacity 300ms var(--ease-out); }
   .c-pillar__media :global(video.is-playing) { opacity: 1; }
   .c-pillar__body { padding: var(--sp-4) var(--sp-5) var(--sp-5); display: grid; gap: var(--sp-3); align-content: start; justify-items: start; }
   .c-pillar__title { font-size: var(--fs-xl); color: var(--gold-100); }
@@ -98,9 +104,18 @@ const t = HOME[lang].pillars;
       tile.addEventListener('focusout', () => stop(tile));
     });
   } else if ('IntersectionObserver' in window) {
+    // Touch: only the single most visible tile loops; every other tile shows its still poster.
+    const ratios = new Map<HTMLElement, number>();
+    let current: HTMLElement | null = null;
     const io = new IntersectionObserver((entries) => {
-      for (const e of entries) (e.intersectionRatio > 0.6 ? play : stop)(e.target as HTMLElement);
-    }, { threshold: [0, 0.6] });
+      for (const e of entries) ratios.set(e.target as HTMLElement, e.intersectionRatio);
+      let best: HTMLElement | null = null, bestRatio = 0.6;
+      for (const [t, r] of ratios) if (r > bestRatio) { best = t; bestRatio = r; }
+      if (best === current) return;
+      if (current) stop(current);
+      current = best;
+      if (current) play(current);
+    }, { threshold: [0, 0.6, 0.8, 1] });
     tiles.forEach((t) => io.observe(t));
   }
   addEventListener('sf:motion', () => { if (!motionOk()) tiles.forEach(stop); });

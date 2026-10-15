@@ -192,9 +192,12 @@ const logoImg = await getImage({ src: logo, format: 'webp', width: 942 });
     video = document.createElement('video');
     video.muted = true; video.loop = true; video.playsInline = true; video.preload = 'auto';
     video.setAttribute('muted', ''); video.setAttribute('playsinline', ''); video.setAttribute('aria-hidden', 'true'); video.tabIndex = -1;
-    for (const s of set) { const el = document.createElement('source'); el.src = s.src; el.type = s.type; video.append(el); }
+    const sources = set.map((s) => { const el = document.createElement('source'); el.src = s.src; el.type = s.type; return el; });
+    video.append(...sources);
     video.addEventListener('playing', () => video?.classList.add('is-playing'), { once: true });
-    video.addEventListener('error', () => { video?.remove(); video = null; }, true);
+    // A <source> fires `error` whenever it is skipped (iOS Safari skips the AV1 WebM and moves on to the MP4).
+    // Only give up, and keep the poster, once the last candidate has failed too.
+    sources[sources.length - 1]?.addEventListener('error', () => { video?.remove(); video = null; });
     slot.append(video);
     syncPlayback();
   }

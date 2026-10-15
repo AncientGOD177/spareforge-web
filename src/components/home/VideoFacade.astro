@@ -3,11 +3,17 @@ import { Picture } from 'astro:assets';
 import type { Video } from '../../data/videos';
 import { HOME } from '../../i18n/home';
 import type { Lang } from '../../i18n';
+import { TRANSCRIPTS } from '../../data/transcripts';
 
 interface Props { video: Video; lang: Lang; vertical?: boolean; sizes: string; widths: number[] }
 const { video, lang, vertical = false, sizes, widths } = Astro.props;
 const t = HOME[lang].videos;
 const title = video.title[lang];
+const tx = TRANSCRIPTS[video.id]?.[lang];
+const txLabel = lang === 'de'
+  ? (video.aiVoice ? 'Beschreibung und Transkript' : 'Beschreibung')
+  : (video.aiVoice ? 'Description and transcript' : 'Description');
+const txNote = lang === 'de' ? 'Sprecherstimme (KI, Englisch), übersetzt:' : 'Narration (AI voice):';
 ---
 <figure class:list={['c-vid', { 'c-vid--v': vertical }]} data-reveal>
   <div class="c-vid__frame">
@@ -24,6 +30,14 @@ const title = video.title[lang];
     {video.aiVoice
       ? <span class="c-vid__meta"><span class="c-chip c-chip--ai">{t.aiVoice}</span> <span class="c-vid__sub">{t.subs}</span></span>
       : <span class="c-vid__meta c-vid__sub">{t.trailerMeta}</span>}
+    {tx && (
+      <details class="c-vid__tx">
+        <summary>{txLabel}</summary>
+        <p>{tx.summary}</p>
+        {tx.lines && <p class="c-vid__tx-note">{txNote}</p>}
+        {tx.lines && <ol>{tx.lines.map((l) => <li>{l}</li>)}</ol>}
+      </details>
+    )}
   </figcaption>
 </figure>
 
@@ -47,9 +61,18 @@ const title = video.title[lang];
   .c-vid__play svg { width: 28px; height: 28px; translate: 2px 0; }
   .c-vid__facade:hover .c-vid__play { transform: scale(1.06); }
   .c-vid__facade:active .c-vid__play { transform: scale(0.97); }
-  .c-vid__dur { position: absolute; z-index: 1; right: 10px; bottom: 10px; padding: 5px 7px 4px; font: 400 0.7rem/1 var(--font-chip); color: var(--text); background: rgb(7 4 24 / 0.85); box-shadow: 0 0 0 2px var(--ink); }
-  .c-vid__cap { display: grid; gap: 6px; }
+  .c-vid__dur { position: absolute; z-index: 1; right: 10px; bottom: 10px; padding: 5px 7px 4px; font: 400 0.75rem/1 var(--font-chip); color: var(--text); background: rgb(7 4 24 / 0.85); box-shadow: 0 0 0 2px var(--ink); }
+  .c-vid__cap { display: grid; gap: 6px; align-content: start; }
+  .c-vid--v .c-vid__title { min-height: 2.4em; }
   .c-vid__title { font: 700 var(--fs-lg)/1.2 var(--font-display); color: var(--gold-100); }
   .c-vid__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
   .c-vid__sub { color: var(--faint); font-size: var(--fs-sm); }
+  .c-vid__tx { margin-top: 4px; color: var(--muted); font-size: var(--fs-sm); }
+  .c-vid__tx summary { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; cursor: pointer; color: var(--gold-200); text-decoration: underline; text-underline-offset: 3px; }
+  .c-vid__tx summary::-webkit-details-marker { display: none; }
+  .c-vid__tx summary::before { content: '+'; font-family: var(--font-chip); color: var(--gold-300); }
+  .c-vid__tx[open] summary::before { content: '–'; }
+  .c-vid__tx p { margin: 6px 0; }
+  .c-vid__tx ol { margin: 0; padding-left: 1.3em; display: grid; gap: 2px; }
+  .c-vid__tx-note { color: var(--faint); }
 </style>

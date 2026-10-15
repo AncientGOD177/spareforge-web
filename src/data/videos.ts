@@ -44,7 +44,7 @@ export const TRAILER: Video = {
     de: 'Bosskämpfe, Klassen, zwanzig Gebiete, Beute, Reittiere, Quests, Verfeinern und LAN-Koop, aufgenommen im Alpha-Build.',
   },
   duration: 'PT1M21S',
-  label: '1:21',
+  label: '1:20',
   poster: trailerPoster,
   sources: [
     { src: `${MEDIA}/trailer/trailer-720.mp4`, type: 'video/mp4', media: '(max-width: 900px)' },
@@ -57,25 +57,25 @@ export const TRAILER: Video = {
 // Shorts carry an English AI narration with burned-in English subtitles (labelled on the page).
 export const SHORTS: Video[] = [
   {
-    id: 'plus10-glow', label: '0:38', duration: 'PT38S', poster: glowPoster, aiVoice: true, uploadDate: '2026-10-11',
+    id: 'plus10-glow', label: '0:29', duration: 'PT29S', poster: glowPoster, aiVoice: true, uploadDate: '2026-10-11',
     title: { en: 'Wait for +10: the refine glow', de: 'Warte auf +10: der Verfeinerungs-Glanz' },
     description: { en: 'A sword refined live from +0 to +10, glowing brighter at every level.', de: 'Ein Schwert wird live von +0 auf +10 verfeinert und leuchtet mit jeder Stufe stärker.' },
     sources: [{ src: `${MEDIA}/shorts/plus10-glow.mp4`, type: 'video/mp4' }],
   },
   {
-    id: 'skill-vfx', label: '0:19', duration: 'PT19S', poster: vfxPoster, aiVoice: true, uploadDate: '2026-10-13',
+    id: 'skill-vfx', label: '0:12', duration: 'PT12S', poster: vfxPoster, aiVoice: true, uploadDate: '2026-10-13',
     title: { en: 'Every skill got a glow-up', de: 'Jeder Skill hat neue Effekte' },
     description: { en: 'The new skill effects of update 0.1.6, one skill per second.', de: 'Die neuen Skill-Effekte aus Update 0.1.6, ein Skill pro Sekunde.' },
     sources: [{ src: `${MEDIA}/shorts/skill-vfx.mp4`, type: 'video/mp4' }],
   },
   {
-    id: 'quest-guidance', label: '0:19', duration: 'PT19S', poster: questPoster, aiVoice: true, uploadDate: '2026-10-14',
+    id: 'quest-guidance', label: '0:14', duration: 'PT14S', poster: questPoster, aiVoice: true, uploadDate: '2026-10-14',
     title: { en: 'Quest guidance: never get lost', de: 'Quest-Wegweiser: nie mehr verlaufen' },
     description: { en: 'The quest star on the minimap and world map leads you to every objective.', de: 'Der Quest-Stern auf Minimap und Weltkarte führt dich zu jedem Ziel.' },
     sources: [{ src: `${MEDIA}/shorts/quest-guidance.mp4`, type: 'video/mp4' }],
   },
   {
-    id: 'tutorial', label: '0:23', duration: 'PT23S', poster: tutorialPoster, aiVoice: true, uploadDate: '2026-10-14',
+    id: 'tutorial', label: '0:19', duration: 'PT19S', poster: tutorialPoster, aiVoice: true, uploadDate: '2026-10-14',
     title: { en: 'New to the game: tutorial and Guide book', de: 'Neu im Spiel: Tutorial und Handbuch' },
     description: { en: 'The new-player tutorial and the Guide book you open with F1.', de: 'Das Einsteiger-Tutorial und das Handbuch, das du mit F1 öffnest.' },
     sources: [{ src: `${MEDIA}/shorts/tutorial.mp4`, type: 'video/mp4' }],

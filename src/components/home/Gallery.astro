@@ -24,6 +24,7 @@ const full = await Promise.all(SHOTS.map(async (s) => {
   <div class="l-container">
     <SectionHead id="gallery-title" kicker={t.kicker} title={t.title} lead={t.lead} />
 
+    <p class="u-sr" role="status" aria-live="polite" data-gal-status data-tpl={lang === 'de' ? '{n} von {total} Screenshots' : 'Showing {n} of {total} screenshots'}></p>
     <div class="c-gal__filters" role="group" aria-label={t.filterLabel} data-gal-filters hidden>
       {filters.map((f, i) => (
         <button type="button" class="c-gal__filter" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={f}>{t.filters[f]}</button>
@@ -43,7 +44,9 @@ const full = await Promise.all(SHOTS.map(async (s) => {
             data-place={s.place}
             data-alt={s.alt[lang]}
             aria-label={t.open(s.title[lang])}
+            aria-describedby={`gal-desc-${s.id}`}
           >
+            <span class="u-sr" id={`gal-desc-${s.id}`}>{s.alt[lang]}</span>
             <Picture
               src={s.img}
               formats={['avif', 'webp']} fallbackFormat="webp"
@@ -63,7 +66,7 @@ const full = await Promise.all(SHOTS.map(async (s) => {
     </ul>
   </div>
 
-  <dialog class="c-lb" aria-label={t.title.replace(/<[^>]+>/g, '')} data-lightbox>
+  <dialog class="c-lb" aria-label={lang === 'de' ? 'Screenshot-Ansicht' : 'Screenshot viewer'} data-lightbox>
     <div class="c-lb__stage" data-lb-stage>
       <picture data-lb-pic>
         <source type="image/avif" data-lb-avif sizes="100vw" />
@@ -120,10 +123,10 @@ const full = await Promise.all(SHOTS.map(async (s) => {
   .c-gal__cap {
     position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 14px 10px;
     display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px;
-    background: linear-gradient(to top, rgb(7 4 24 / 0.92), rgb(7 4 24 / 0.6) 60%, transparent);
+    background: linear-gradient(to top, rgb(7 4 24 / 0.96), rgb(7 4 24 / 0.82) 55%, rgb(7 4 24 / 0.35) 85%, transparent);
   }
   .c-gal__title { font: 700 1rem/1.2 var(--font-display); color: var(--gold-100); text-shadow: 0 2px 0 var(--ink); }
-  .c-gal__place { font: 400 0.64rem/1 var(--font-chip); letter-spacing: 0.06em; text-transform: uppercase; color: var(--star); }
+  .c-gal__place { font: 400 0.75rem/1 var(--font-chip); letter-spacing: 0.06em; text-transform: uppercase; color: var(--star); }
 
   /* Lightbox */
   .c-lb { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgb(7 4 24 / 0.96); color: var(--text); overflow: hidden; }
@@ -142,7 +145,7 @@ const full = await Promise.all(SHOTS.map(async (s) => {
   .c-lb__bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px; padding: 14px clamp(16px, 7vw, 96px) max(14px, env(safe-area-inset-bottom)); }
   .c-lb__cap { margin: 0; }
   .c-lb__title { font: 700 1.1rem/1.2 var(--font-display); color: var(--gold-100); }
-  .c-lb__place { font: 400 0.68rem/1 var(--font-chip); color: var(--star); text-transform: uppercase; letter-spacing: 0.06em; margin-left: 8px; }
+  .c-lb__place { font: 400 0.75rem/1 var(--font-chip); color: var(--star); text-transform: uppercase; letter-spacing: 0.06em; margin-left: 8px; }
   .c-lb__count { margin: 0; font: 400 0.75rem/1 var(--font-chip); color: var(--muted); }
   .c-lb__btn { position: absolute; width: 52px; height: 52px; display: grid; place-items: center; border: 0; cursor: pointer; color: var(--gold-100); background: var(--ui-blue-800); box-shadow: inset 0 0 0 2px var(--gold-600), 0 0 0 2px var(--ink); }
   .c-lb__btn:hover { background: var(--ui-blue-700); color: var(--text); }
@@ -198,6 +201,7 @@ const full = await Promise.all(SHOTS.map(async (s) => {
       opener = a;
       show(visible.indexOf(a), true);
       dlg.showModal();
+      dlg.querySelector<HTMLButtonElement>('[data-lb-close]')?.focus();
       document.documentElement.classList.add('is-locked');
     }));
     dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(cur - 1));
@@ -226,6 +230,8 @@ const full = await Promise.all(SHOTS.map(async (s) => {
         buttons.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
         items.forEach((li) => { li.hidden = f !== 'all' && !li.dataset.tags!.split(' ').includes(f); li.classList.add('is-in'); });
         visible = links.filter((a) => !a.closest('li')!.hidden);
+        const st = document.querySelector<HTMLElement>('[data-gal-status]');
+        if (st) st.textContent = st.dataset.tpl!.replace('{n}', String(visible.length)).replace('{total}', String(links.length));
       }));
     }
   }

@@ -95,7 +95,9 @@ const close = lang === 'de' ? 'Schließen' : 'Close';
   document.querySelectorAll<HTMLElement>('[data-open-trailer]').forEach((b) => b.addEventListener('click', () => {
     if (!dlg || !slot) return;
     opener = b;
-    slot.replaceChildren(makeVideo(JSON.parse(dlg.dataset.sources ?? '[]')));
+    const v = makeVideo(JSON.parse(dlg.dataset.sources ?? '[]'));
+    v.setAttribute('aria-label', dlg.getAttribute('aria-label') ?? '');
+    slot.replaceChildren(v);
     dlg.showModal();
     document.documentElement.classList.add('is-locked');
     (slot.querySelector('video') as HTMLVideoElement).play().catch(() => {});

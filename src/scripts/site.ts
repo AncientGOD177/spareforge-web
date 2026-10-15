@@ -12,12 +12,20 @@ if (menu && opener) {
     menu.showModal();
     root.classList.add('is-locked');
   });
+  // Following a link moves focus to its target; only Esc / Close return focus to the Menu button.
+  let viaLink = false;
   menu.addEventListener('close', () => {
     root.classList.remove('is-locked');
-    opener.focus();
+    if (!viaLink) opener.focus();
+    viaLink = false;
   });
   menu.querySelector('[data-menu-close]')?.addEventListener('click', () => menu.close());
-  menu.querySelectorAll('[data-menu-link]').forEach((a) => a.addEventListener('click', () => menu.close()));
+  menu.querySelectorAll<HTMLAnchorElement>('[data-menu-link]').forEach((a) => a.addEventListener('click', () => {
+    viaLink = true;
+    menu.close();
+    const target = a.hash ? document.getElementById(a.hash.slice(1)) : null;
+    if (target) { target.setAttribute('tabindex', '-1'); requestAnimationFrame(() => target.focus({ preventScroll: true })); }
+  }));
   menu.addEventListener('click', (e) => { if (e.target === menu) menu.close(); });
 }
 

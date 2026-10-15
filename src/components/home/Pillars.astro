@@ -68,6 +68,7 @@ const t = HOME[lang].pillars;
 
 <script>
   import { motionOk } from '../../lib/motion';
+  import { ambientPaused } from '../../lib/ambient';
 
   // Micro-loops: created only when a tile is near the viewport. Touch devices play in view;
   // mouse devices play on hover/focus. Reduced motion keeps the poster still.
@@ -86,7 +87,7 @@ const t = HOME[lang].pillars;
     tile.querySelector('.c-pillar__media')?.append(v);
     return v;
   }
-  const play = (tile: HTMLElement) => { if (motionOk()) ensureVideo(tile).play().catch(() => {}); };
+  const play = (tile: HTMLElement) => { if (motionOk() && !ambientPaused()) ensureVideo(tile).play().catch(() => {}); };
   const stop = (tile: HTMLElement) => tile.querySelector('video')?.pause();
 
   if (hoverable) {
@@ -103,4 +104,6 @@ const t = HOME[lang].pillars;
     tiles.forEach((t) => io.observe(t));
   }
   addEventListener('sf:motion', () => { if (!motionOk()) tiles.forEach(stop); });
+  // The hero's pause control stops every ambient loop.
+  addEventListener('sf:ambient', ((e: CustomEvent<{ paused: boolean }>) => { if (e.detail.paused) tiles.forEach(stop); }) as EventListener);
 </script>

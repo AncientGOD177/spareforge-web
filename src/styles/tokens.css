@@ -54,9 +54,9 @@
   --ink: #0d0a12; /* the game's 1px outline colour */
 
   /* Type */
-  --font-display: 'Pixelify Sans', 'Cascadia Mono', ui-monospace, system-ui, sans-serif;
+  --font-display: 'Forge Display', 'Cascadia Mono', ui-monospace, system-ui, sans-serif;
   --font-body: 'Alegreya Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --font-chip: 'Silkscreen', 'Pixelify Sans', ui-monospace, monospace;
+  --font-chip: 'Silkscreen', 'Forge Display', ui-monospace, monospace;
 
   --fs-xs: 0.8rem;
   --fs-sm: 0.92rem;

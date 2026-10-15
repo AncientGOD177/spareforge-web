@@ -1,10 +1,7 @@
 ---
-import '@fontsource/pixelify-sans/latin-700.css';
 import '@fontsource/alegreya-sans/latin-400.css';
 import '@fontsource/alegreya-sans/latin-700.css';
 import '@fontsource/silkscreen/latin-400.css';
-import pixelify700 from '@fontsource/pixelify-sans/files/pixelify-sans-latin-700-normal.woff2?url';
-import silkscreen400 from '@fontsource/silkscreen/files/silkscreen-latin-400-normal.woff2?url';
 import '../styles/base.css';
 import '../styles/pixel.css';
 import AlphaRibbon from '../components/layout/AlphaRibbon.astro';
@@ -63,8 +60,7 @@ const ld = jsonld ? (Array.isArray(jsonld) ? jsonld : [jsonld]) : [];
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="preload" href={pixelify700} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={silkscreen400} as="font" type="font/woff2" crossorigin />
+    <!-- No font preloads: they warn on cached page-to-page navigation; fonts swap in with size-adjust instead. -->
     {preload.map((p) => (
       <link rel="preload" as="image" href={p.href} imagesrcset={p.srcset} imagesizes={p.sizes} type={p.type} fetchpriority="high" />
     ))}

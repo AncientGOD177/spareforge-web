@@ -4,8 +4,8 @@ interface Props { lang: Lang; alternates: { en: string; de: string } }
 const { lang, alternates } = Astro.props;
 ---
 <div class="c-lang" role="group" aria-label={UI[lang].nav.lang}>
-  <a href={alternates.en} hreflang="en" lang="en" aria-current={lang === 'en' ? 'page' : undefined} data-lang-link="en">EN</a>
-  <a href={alternates.de} hreflang="de" lang="de" aria-current={lang === 'de' ? 'page' : undefined} data-lang-link="de">DE</a>
+  <a href={alternates.en} hreflang="en" lang="en" aria-label="English" aria-current={lang === 'en' ? 'page' : undefined} data-lang-link="en">EN</a>
+  <a href={alternates.de} hreflang="de" lang="de" aria-label="Deutsch" aria-current={lang === 'de' ? 'page' : undefined} data-lang-link="de">DE</a>
 </div>
 
 <style>

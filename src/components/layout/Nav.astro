@@ -81,12 +81,12 @@ const join = route === 'alpha' ? '#alpha' : homeAnchor(lang, 'alpha');
   .c-nav__brand { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; text-decoration: none; flex: none; }
   .c-nav__anvil { width: 32px; height: 32px; image-rendering: pixelated; }
   .c-nav__word { width: 132px; height: auto; image-rendering: auto; }
-  .c-nav__alpha { padding: 4px 6px 3px; font-size: 0.6rem; translate: 0 6px; }
+  .c-nav__alpha { padding: 4px 6px 3px; translate: 0 6px; }
   .c-nav__links { margin-inline: auto; display: none; }
   .c-nav__links ul { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
   .c-nav__links a {
     position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px;
-    color: var(--muted); text-decoration: none; font: 700 1rem/1 var(--font-display); letter-spacing: 0.02em;
+    color: var(--muted); text-decoration: none; font: 400 0.8rem/1 var(--font-chip); letter-spacing: 0.06em; text-transform: uppercase;
     transition: color var(--t-micro) var(--ease-out);
   }
   .c-nav__links a::after {
@@ -146,4 +146,6 @@ const join = route === 'alpha' ? '#alpha' : homeAnchor(lang, 'alpha');
   }
   .c-menu__links a:hover { background: linear-gradient(90deg, rgb(255 201 60 / 0.18), transparent); }
   .c-menu__join { width: 100%; }
+  .c-menu__inner > :global(.c-lang) { width: 100%; }
+  .c-menu__inner > :global(.c-lang a) { flex: 1; min-height: 48px; }
 </style>

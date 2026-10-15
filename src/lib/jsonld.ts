@@ -28,8 +28,8 @@ export function homeGraph(lang: Lang, posters: Record<string, string>) {
       {
         '@type': 'Organization', '@id': `${SITE}/#org`, name: 'SpareForge', url: `${SITE}/`,
         logo: abs('/icon-512.png'),
-        // The key-only itch page is deliberately not listed (the site never points to a download).
-        sameAs: [LINKS.discord, LINKS.youtube, LINKS.tiktok, LINKS.instagram, LINKS.steam].filter(Boolean),
+        // The key-only itch page is listed for entity matching only; it is never a visible link.
+        sameAs: [LINKS.itch, LINKS.discord, LINKS.youtube, LINKS.tiktok, LINKS.instagram, LINKS.steam].filter(Boolean),
       },
       {
         '@type': 'VideoGame', '@id': `${SITE}/#game`, name: 'SpareForge', url: home,
@@ -44,6 +44,7 @@ export function homeGraph(lang: Lang, posters: Record<string, string>) {
         inLanguage: ['en', 'de', 'fr', 'es', 'it', 'pt-BR', 'pl', 'ru', 'tr', 'zh-CN', 'ja', 'ko'],
         publisher: { '@id': `${SITE}/#org` }, author: { '@id': `${SITE}/#org` },
         trailer: { '@id': `${SITE}/#video-trailer` },
+        sameAs: [LINKS.itch, LINKS.steam].filter(Boolean),
       },
       video(TRAILER),
       ...SHORTS.map(video),

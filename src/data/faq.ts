@@ -17,7 +17,6 @@ export const FAQ: Record<'en' | 'de', QA[]> = {
     { q: 'Which languages does the game have?', a: `Twelve, switchable live in Options: ${langs}.` },
     { q: 'Will my characters carry over to new versions?', a: 'Normally yes. If a save reset ever becomes necessary during the alpha, it is announced in advance. Back up your saves to be safe.' },
     { q: 'When is the Steam release?', a: 'A Steam release is planned, but there is no date and no store page yet.' },
-    { q: 'Who makes SpareForge?', a: 'One person, in the Godot engine: the code, the pixel art, the music and the sound.' },
   ],
   de: [
     { q: 'Ist SpareForge kostenlos?', a: 'Ja, die Alpha ist kostenlos. In-App-Käufe sind für später im Lebenszyklus des Spiels geplant. Die Alpha hat keine.' },
@@ -30,6 +29,5 @@ export const FAQ: Record<'en' | 'de', QA[]> = {
     { q: 'Welche Sprachen hat das Spiel?', a: `Zwölf, live umschaltbar in den Optionen: ${langs}.` },
     { q: 'Bleiben meine Charaktere in neuen Versionen erhalten?', a: 'Normalerweise ja. Falls während der Alpha ein Zurücksetzen nötig wird, wird es vorher angekündigt. Sichere zur Sicherheit deine Spielstände.' },
     { q: 'Wann erscheint SpareForge auf Steam?', a: 'Ein Steam-Release ist geplant, aber es gibt noch keinen Termin und noch keine Shopseite.' },
-    { q: 'Wer macht SpareForge?', a: 'Eine Person, in der Godot-Engine: Code, Pixel-Art, Musik und Sound.' },
   ],
 };

@@ -40,7 +40,7 @@ export const UI = {
       dismiss: 'Hide this notice',
     },
     footer: {
-      blurb: 'A pixel action RPG in alpha. Made by one person in Godot.',
+      blurb: 'A pixel action RPG in alpha, made with the Godot engine.',
       game: 'Game',
       community: 'Community',
       legal: 'Legal',
@@ -87,7 +87,7 @@ export const UI = {
       dismiss: 'Hinweis ausblenden',
     },
     footer: {
-      blurb: 'Ein Pixel-Action-RPG in der Alpha. Von einer Person in Godot gebaut.',
+      blurb: 'Ein Pixel-Action-RPG in der Alpha, gebaut mit der Godot-Engine.',
       game: 'Spiel',
       community: 'Community',
       legal: 'Rechtliches',

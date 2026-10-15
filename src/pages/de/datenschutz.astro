@@ -35,13 +35,13 @@ const stand = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', 
   </ul>
 
   <h2>4. Kontaktformular (Web3Forms)</h2>
-  <p>Für das <a href={ROUTES.contact.de}>Kontaktformular</a> nutzen wir den Dienst Web3Forms (<a href="https://web3forms.com" rel="noopener">web3forms.com</a>). Wenn du das Formular absendest, schickt dein Browser deine Angaben direkt an Web3Forms, das sie per E-Mail an uns weiterleitet. Vorher findet keine Verbindung zu Web3Forms statt.</p>
+  <p>Für das <a href={ROUTES.contact.de}>Kontaktformular</a> nutzen wir den Dienst Web3Forms (<a href="https://web3forms.com" rel="noopener">web3forms.com</a>), betrieben von Web3Creative, Kerala, Indien. Die Server von Web3Forms stehen nach Angaben des Anbieters in den USA (Region US-East). Wenn du das Formular absendest, schickt dein Browser deine Angaben direkt an Web3Forms, das sie per E-Mail an uns weiterleitet. Vorher findet keine Verbindung zu Web3Forms statt.</p>
   <ul>
     <li><strong>Daten:</strong> Name, E-Mail-Adresse, Betreff und Nachricht sowie die bei jeder Übertragung anfallenden technischen Daten (IP-Adresse, Zeitpunkt, Browserkennung).</li>
     <li><strong>Zweck:</strong> Deine Anfrage bearbeiten und beantworten.</li>
     <li><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO, soweit deine Anfrage auf einen Vertrag oder vorvertragliche Maßnahmen zielt, im Übrigen Art. 6 Abs. 1 lit. f DSGVO (unser berechtigtes Interesse, Anfragen zu beantworten).</li>
-    <li><strong>Drittlandübermittlung:</strong> Web3Forms kann die Daten außerhalb der EU, insbesondere in den USA, verarbeiten. Für die USA besteht ein angemessenes Datenschutzniveau nur bei Anbietern, die nach dem EU-US Data Privacy Framework zertifiziert sind. Ob Web3Forms zertifiziert ist, ist uns nicht bekannt <span class="todo">[…]</span>. Wenn du das nicht möchtest, schreib uns stattdessen direkt eine E-Mail.</li>
-    <li><strong>Speicherdauer:</strong> Wir löschen deine Nachricht, sobald deine Anfrage erledigt ist, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen. Wie lange Web3Forms Daten speichert, richtet sich nach dessen <a href="https://web3forms.com/privacy" rel="noopener">Datenschutzerklärung</a>.</li>
+    <li><strong>Drittlandübermittlung:</strong> Deine Angaben werden dabei nach Indien (Sitz des Anbieters) und in die USA (Server) übermittelt. Für diese Übermittlung besteht kein Angemessenheitsbeschluss der EU-Kommission, und Web3Forms nennt keine Zertifizierung nach dem EU-US Data Privacy Framework. Die Übermittlung erfolgt, weil du deine Nachricht ausdrücklich über das Formular an uns senden möchtest (Art. 49 Abs. 1 lit. b DSGVO). Wenn du das nicht möchtest, schreib uns stattdessen direkt eine E-Mail.</li>
+    <li><strong>Speicherdauer:</strong> Web3Forms speichert Formulareinsendungen nach eigenen Angaben nicht, sondern leitet sie nur weiter; Server-Logs mit technischen Daten werden dort etwa alle zwei Monate gelöscht. Wir löschen deine Nachricht, sobald deine Anfrage erledigt ist, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</li>
     <li>Das Formular enthält ein unsichtbares Feld gegen Spam-Bots. Es speichert nichts auf deinem Gerät.</li>
   </ul>
 
@@ -64,13 +64,16 @@ const stand = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', 
   <h2>7. Links zu anderen Diensten</h2>
   <p>Wir verlinken auf Discord, TikTok, Instagram, YouTube und itch.io. Das sind einfache Links, keine Einbettungen: Erst wenn du einen Link anklickst, verbindet sich dein Browser mit dem jeweiligen Anbieter, der dann nach seiner eigenen Datenschutzerklärung verantwortlich ist. Auf unseren Profilen dort sehen wir nur, was jedes Konto sieht, zum Beispiel Aufrufzahlen.</p>
 
-  <h2>8. Alpha-Zugang über Discord und itch.io</h2>
-  <p>Den Alpha-Key bekommst du über unseren Discord-Server. Anbieter ist die Discord Inc., 444 De Haro Street, Suite 200, San Francisco, CA 94107, USA. Wenn du dich mit <code>/apply</code> oder „Tester werden“ bewirbst, sehen die Server-Admins deinen Discord-Namen und deine Bewerbung. Wirst du angenommen, schickt dir der SpareForge-Bot einen persönlichen itch.io-Key per Direktnachricht.</p>
+  <h2>8. Discord-Server, Bot und Alpha-Tester-Bewerbung</h2>
+  <p>Den Alpha-Key bekommst du über unseren Discord-Server. Plattformanbieter ist die Discord Inc., 444 De Haro Street, Suite 200, San Francisco, CA 94107, USA; für alles, was auf Discord selbst passiert, gilt die <a href="https://discord.com/privacy" rel="noopener">Datenschutzerklärung von Discord</a>. Wenn du dich mit <code>/apply</code> oder „Tester werden“ bewirbst, sehen die Server-Admins deinen Discord-Namen und deine Bewerbung. Wirst du angenommen, schickt dir der SpareForge-Bot einen persönlichen itch.io-Key per Direktnachricht.</p>
+  <p>Der Bot speichert nur das Nötige: Tester-Bewerbungen (Antworten, Status, Review-Notiz), den vergebenen itch.io-Key, Verwarnungen und Moderationsaktionen sowie Bug-/Vorschlags-/Ticket-Einträge, jeweils verknüpft mit der Discord-Nutzer-ID. Abgelehnte Bewerbungen werden 90 Tage nach der Prüfung automatisch gelöscht. Bewerbungen und Keys ausgetretener Mitglieder werden 30 Tage nach dem Austritt gelöscht. Jeder kann mit <code>/privacy export</code> seine Daten abrufen und mit <code>/privacy request-delete</code> die Löschung beantragen. Bei einer Löschung werden Bewerbungen und Verwarnungen gelöscht, der Key widerrufen, Mod-Aktionen, Bugs, Vorschläge und Tickets anonymisiert. Backups behalten die neuesten 7 Kopien; gelöschte Daten verschwinden daraus mit der Rotation. Nachrichten, die Nutzer selbst auf Discord geschrieben haben, unterliegen Discord.</p>
   <ul>
-    <li><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (du möchtest am Alpha-Test teilnehmen).</li>
-    <li><strong>Was gespeichert wird:</strong> Welche Daten der Bot zu einer Bewerbung und zum vergebenen Key festhält und wie lange, wird hier ergänzt <span class="todo">[…]</span>.</li>
+    <li><strong>Zweck:</strong> Auswahl der Alpha-Tester, Vergabe der Keys sowie Moderation und Support auf dem Server.</li>
+    <li><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (du möchtest am Alpha-Test teilnehmen) und Art. 6 Abs. 1 lit. f DSGVO (unser berechtigtes Interesse an einer sicheren, moderierten Community und an der Bearbeitung von Fehlermeldungen).</li>
+    <li><strong>Speicherort:</strong> eine lokale SQLite-Datenbank auf dem PC des Betreibers, mit 7 rotierenden Sicherungskopien. Empfänger ist nur Discord als Plattform, über die der Bot arbeitet; eine sonstige Weitergabe an Dritte findet nicht statt.</li>
+    <li><strong>Speicherdauer:</strong> abgelehnte Bewerbungen 90 Tage nach der Prüfung, Bewerbungen und Keys ausgetretener Mitglieder 30 Tage nach dem Austritt, im Übrigen bis zur Löschung auf Antrag; aus den Backups verschwinden gelöschte Daten mit der Rotation der 7 Kopien.</li>
+    <li><strong>Auskunft und Löschung:</strong> mit <code>/privacy export</code> und <code>/privacy request-delete</code> auf dem Server oder jederzeit über das <a href={ROUTES.contact.de}>Kontaktformular</a> bzw. per E-Mail an <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</li>
     <li>Zum Einlösen des Keys meldest du dich bei itch.io an (Itch Corp, USA). Dort gilt die Datenschutzerklärung von itch.io.</li>
-    <li>Discord und itch.io verarbeiten Daten auch in den USA und sind dafür nach eigener Datenschutzerklärung verantwortlich.</li>
   </ul>
 
   <h2>9. Das Spiel</h2>

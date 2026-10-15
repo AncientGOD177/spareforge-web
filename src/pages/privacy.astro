@@ -36,13 +36,13 @@ const updated = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long'
   </ul>
 
   <h2>4. Contact form (Web3Forms)</h2>
-  <p>The <a href={ROUTES.contact.en}>contact form</a> uses the Web3Forms service (<a href="https://web3forms.com" rel="noopener">web3forms.com</a>). When you submit the form, your browser sends your entries directly to Web3Forms, which forwards them to us by email. There is no connection to Web3Forms before you submit.</p>
+  <p>The <a href={ROUTES.contact.en}>contact form</a> uses the Web3Forms service (<a href="https://web3forms.com" rel="noopener">web3forms.com</a>), operated by Web3Creative, Kerala, India. According to the provider, its servers are located in the USA (US-East region). When you submit the form, your browser sends your entries directly to Web3Forms, which forwards them to us by email. There is no connection to Web3Forms before you submit.</p>
   <ul>
     <li><strong>Data:</strong> name, email address, subject and message, plus the technical data of every transfer (IP address, time, user agent).</li>
     <li><strong>Purpose:</strong> handling and answering your request.</li>
     <li><strong>Legal basis:</strong> Art. 6(1)(b) GDPR where your request aims at a contract or pre-contractual steps, otherwise Art. 6(1)(f) GDPR (our legitimate interest in answering requests).</li>
-    <li><strong>Transfer to a third country:</strong> Web3Forms may process the data outside the EU, in particular in the USA. The USA only offers an adequate level of protection for companies certified under the EU-US Data Privacy Framework. We do not know whether Web3Forms is certified <span class="todo">[…]</span>. If you prefer, write to us by email instead.</li>
-    <li><strong>Retention:</strong> we delete your message once your request is settled, unless statutory retention duties apply. Web3Forms' retention follows its <a href="https://web3forms.com/privacy" rel="noopener">privacy policy</a>.</li>
+    <li><strong>Transfer to third countries:</strong> your entries are transferred to India (the provider's seat) and the USA (its servers). There is no EU adequacy decision covering this transfer, and Web3Forms does not state a certification under the EU-US Data Privacy Framework. The transfer takes place because you explicitly choose to send your message through the form (Art. 49(1)(b) GDPR). If you prefer, write to us by email instead.</li>
+    <li><strong>Retention:</strong> according to Web3Forms, form submissions are not stored but only forwarded; server logs with technical data are deleted there about every two months. We delete your message once your request is settled, unless statutory retention duties apply.</li>
     <li>The form contains a hidden field that catches spam bots. It stores nothing on your device.</li>
   </ul>
 
@@ -65,13 +65,16 @@ const updated = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long'
   <h2>7. Links to other services</h2>
   <p>We link to Discord, TikTok, Instagram, YouTube and itch.io. These are plain links, not embeds: your browser only connects to a provider when you click, and that provider is then responsible under its own privacy policy. On our profiles there, we only see what every account holder sees, such as view counts.</p>
 
-  <h2>8. Alpha access through Discord and itch.io</h2>
-  <p>Alpha keys are handed out on our Discord server, provided by Discord Inc., 444 De Haro Street, Suite 200, San Francisco, CA 94107, USA. When you apply with <code>/apply</code> or "Become a tester", the server admins see your Discord name and your application. If you are accepted, the SpareForge bot sends you a personal itch.io key by direct message.</p>
+  <h2>8. Discord server, bot and alpha tester application</h2>
+  <p>Alpha keys are handed out on our Discord server. The platform is provided by Discord Inc., 444 De Haro Street, Suite 200, San Francisco, CA 94107, USA; everything that happens on Discord itself is covered by <a href="https://discord.com/privacy" rel="noopener">Discord's privacy policy</a>. When you apply with <code>/apply</code> or "Become a tester", the server admins see your Discord name and your application. If you are accepted, the SpareForge bot sends you a personal itch.io key by direct message.</p>
+  <p>The bot stores only what it needs: tester applications (answers, status, review note), the assigned itch.io key, warnings and moderation actions, and bug/suggestion/ticket records, each linked to a Discord user ID. Declined applications are deleted automatically 90 days after review. Applications and keys of members who left are removed 30 days after they left. Anyone can run <code>/privacy export</code> to get their data and <code>/privacy request-delete</code> to ask for deletion. Deletion removes applications and warnings, revokes the key, and anonymizes mod actions, bugs, suggestions and tickets. Backups keep the newest 7 copies, so deleted data disappears from them as they rotate. Messages users wrote on Discord itself are governed by Discord.</p>
   <ul>
-    <li><strong>Legal basis:</strong> Art. 6(1)(b) GDPR (you want to take part in the alpha test).</li>
-    <li><strong>What is stored:</strong> which data the bot keeps about an application and the issued key, and for how long, will be added here <span class="todo">[…]</span>.</li>
+    <li><strong>Purpose:</strong> selecting alpha testers, distributing keys, and moderation and support on the server.</li>
+    <li><strong>Legal basis:</strong> Art. 6(1)(b) GDPR (you want to take part in the alpha test) and Art. 6(1)(f) GDPR (our legitimate interest in a safe, moderated community and in handling bug reports).</li>
+    <li><strong>Storage:</strong> a local SQLite database on the operator's PC, with 7 rotating backups. The only recipient is Discord as the platform the bot runs on; nothing else is passed on to third parties.</li>
+    <li><strong>Retention:</strong> declined applications 90 days after review, applications and keys of members who left 30 days after they left, everything else until deleted on request; deleted data drops out of the backups as the 7 copies rotate.</li>
+    <li><strong>Access and deletion:</strong> with <code>/privacy export</code> and <code>/privacy request-delete</code> on the server, or at any time through the <a href={ROUTES.contact.en}>contact form</a> or by email to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</li>
     <li>To redeem the key you sign in to itch.io (Itch Corp, USA), whose privacy policy applies there.</li>
-    <li>Discord and itch.io also process data in the USA and are responsible for that under their own policies.</li>
   </ul>
 
   <h2>9. The game</h2>

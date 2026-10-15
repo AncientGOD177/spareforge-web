@@ -11,12 +11,11 @@ export const HOME = {
   en: {
     hero: {
       h1Hidden: 'SpareForge, a pixel action RPG with 4-player LAN co-op, in free alpha',
-      tagline: 'Forge your legend. A pixel action RPG in the spirit of the classic online RPGs, built from scratch by one developer.',
+      tagline: 'Forge your legend. A pixel action RPG in the spirit of the classic online RPGs, solo or with up to three friends on LAN.',
       join: 'Join the Alpha',
       trailer: 'Watch the trailer',
       chips: ['Free alpha', 'Windows', '4-player LAN co-op', '12 languages'],
-      pause: 'Pause background video',
-      play: 'Play background video',
+      pause: 'Pause background animation',
       scroll: 'Scroll to the game',
     },
     pillars: {
@@ -52,7 +51,7 @@ export const HOME = {
       title: 'Watch it <em>move</em>',
       lead: 'Real footage from the alpha build. Nothing loads until you press play.',
       trailerTitle: 'Gameplay showcase',
-      trailerMeta: '1:21 · music and in-game sound',
+      trailerMeta: '1:20 · music and in-game sound',
       shortsLabel: 'Shorts',
       play: (t: string) => `Play video: ${t}`,
       aiVoice: 'Narration: AI voice',
@@ -78,7 +77,7 @@ export const HOME = {
       steps: [
         { title: 'Join the Discord', text: 'Open the invite and join the SpareForge server.' },
         { title: 'Apply as a tester', text: 'Click <b>Become a tester</b> in #welcome, or type <code>/apply</code>.' },
-        { title: 'Get accepted', text: 'Staff review applications regularly. Acceptance is not automatic.' },
+        { title: 'Get accepted', text: 'Staff review applications regularly. Acceptance is not guaranteed.' },
         { title: 'Key in your DMs', text: 'The SpareForge bot sends you a personal itch.io key by direct message. Allow DMs from server members.' },
         { title: 'Redeem the key', text: 'Open the key link while signed in to itch.io and claim it. The game lands in your itch library.' },
         { title: 'Download and play', text: 'Download it from your library, or install it with the itch app, which installs every update for you.' },
@@ -114,7 +113,7 @@ export const HOME = {
     community: {
       kicker: 'Community',
       title: 'Join the forge <em>on Discord</em>',
-      text: 'Report bugs, share builds, find a LAN party and get your alpha key. The developer is in there too.',
+      text: 'Report bugs, share builds, find a LAN party and get your alpha key.',
       cta: 'Join the Discord',
       follow: 'Follow the build',
     },
@@ -126,24 +125,23 @@ export const HOME = {
   de: {
     hero: {
       h1Hidden: 'SpareForge, ein Pixel-Action-RPG mit LAN-Koop für bis zu 4 Spieler, als kostenlose Alpha',
-      tagline: 'Schmiede deine Legende. Ein Pixel-Action-RPG im Geist der klassischen Online-RPGs, von einem Entwickler von Grund auf gebaut.',
+      tagline: 'Schmiede deine Legende. Ein Pixel-Action-RPG im Geist der klassischen Online-RPGs, allein oder mit bis zu drei Freunden im LAN.',
       join: 'Alpha beitreten',
       trailer: 'Trailer ansehen',
       chips: ['Kostenlose Alpha', 'Windows', 'LAN-Koop für 4', '12 Sprachen'],
-      pause: 'Hintergrundvideo pausieren',
-      play: 'Hintergrundvideo abspielen',
+      pause: 'Hintergrundanimation pausieren',
       scroll: 'Zum Spiel scrollen',
     },
     pillars: {
       kicker: 'Das Spiel',
       title: 'Sechs Gründe, <em>den Hammer zu heben</em>',
-      lead: 'Echtzeitkämpfe, ein klassisches Jobsystem und Beute, die dich weiterjagen lässt. Allein oder mit drei Freunden im selben Netzwerk.',
+      lead: 'Echtzeitkämpfe, ein klassisches Jobsystem und Beute, für die sich jede Jagd lohnt. Allein oder mit drei Freunden im selben Netzwerk.',
       items: [
         { id: 'skills', title: 'Jeder Skill mit eigenem Effekt', text: 'Mit 0.1.6 hat jeder aktive Skill seinen eigenen Effekt bekommen: splitternde Frostnadeln, Sternenfall, heilige Lanzen.', chip: '70+ Skills' },
         { id: 'loot', title: 'Beute mit Zufallswerten', text: 'Sechs Seltenheiten. Seltene Drops würfeln zufällige Präfixe und Suffixe, von Crude bis Perfect. Mit V sammelt Auto-Loot alles ein.', chip: '6 Seltenheiten' },
         { id: 'refine', title: 'Verfeinern bis +10', text: 'Bring deine Waffe zum Amboss. Ab +3 schimmert sie, bei +7 glüht sie golden, und +10 bekommt den Regenbogen-Glanz.', chip: '+1 bis +10' },
         { id: 'boss', title: 'Bosse und Apex-Kämpfe', text: 'Feldbosse, Dungeonbosse und Apex-Kämpfe mit eigener Beute, verteilt über zwanzig Gebiete.', chip: '20 Gebiete' },
-        { id: 'mounts', title: 'Haustiere und Reittiere', text: 'Ein Sammel-Haustier sammelt Drops in seine eigene Tasche. Reite vom Pony bis zum Greif.', chip: 'Pets + Reittiere' },
+        { id: 'mounts', title: 'Haustiere und Reittiere', text: 'Ein Haustier hebt Drops für dich auf und trägt sie in seiner eigenen Tasche. Reite vom Pony bis zum Greif.', chip: 'Pets + Reittiere' },
         { id: 'coop', title: 'Zusammen im LAN', text: 'Bis zu vier Spieler im Heimnetzwerk: Gruppe, Handel, Chat und Arena-Duelle.', chip: 'LAN · bis zu 4' },
       ],
       also: 'Außerdem in der Alpha',
@@ -167,7 +165,7 @@ export const HOME = {
       title: 'Sieh es dir <em>in Bewegung</em> an',
       lead: 'Echte Aufnahmen aus dem Alpha-Build. Erst beim Klick auf Abspielen wird etwas geladen.',
       trailerTitle: 'Gameplay-Showcase',
-      trailerMeta: '1:21 · Musik und Spielsound',
+      trailerMeta: '1:20 · Musik und Spielsound',
       shortsLabel: 'Shorts',
       play: (t: string) => `Video abspielen: ${t}`,
       aiVoice: 'Sprecherstimme: KI',
@@ -193,7 +191,7 @@ export const HOME = {
       steps: [
         { title: 'Discord beitreten', text: 'Öffne die Einladung und tritt dem SpareForge-Server bei.' },
         { title: 'Als Tester bewerben', text: 'Klicke in #welcome auf <b>Tester werden</b> oder tippe <code>/apply</code>.' },
-        { title: 'Angenommen werden', text: 'Das Team prüft Bewerbungen regelmäßig. Eine Zusage ist nicht automatisch.' },
+        { title: 'Angenommen werden', text: 'Das Team prüft Bewerbungen regelmäßig. Eine Zusage ist nicht garantiert.' },
         { title: 'Key per DM', text: 'Der SpareForge-Bot schickt dir einen persönlichen itch.io-Key als Direktnachricht. Erlaube DMs von Servermitgliedern.' },
         { title: 'Key einlösen', text: 'Öffne den Key-Link, während du bei itch.io angemeldet bist, und löse ihn ein. Das Spiel landet in deiner itch-Bibliothek.' },
         { title: 'Laden und spielen', text: 'Lade es aus deiner Bibliothek oder installiere es mit der itch-App, die jedes Update automatisch einspielt.' },
@@ -229,7 +227,7 @@ export const HOME = {
     community: {
       kicker: 'Community',
       title: 'Komm in die Schmiede <em>auf Discord</em>',
-      text: 'Melde Fehler, teile Builds, finde eine LAN-Runde und hol dir deinen Alpha-Key. Der Entwickler ist auch dort.',
+      text: 'Melde Fehler, teile Builds, finde eine LAN-Runde und hol dir deinen Alpha-Key.',
       cta: 'Discord beitreten',
       follow: 'Die Entwicklung verfolgen',
     },

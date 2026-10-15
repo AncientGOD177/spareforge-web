@@ -5,8 +5,9 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const PLACEHOLDERS = [/\[OWNER TO PROVIDE[^\]]*\]/i, /FEHLT\s*\]/, /\[HAUSNUMMER/i, /\[contact email\]/i, /\[Country\]/];
-// No build files and no itch download/store buttons. The itch profile URL itself may appear as a plain profile link.
-const DOWNLOADS = [/href="[^"]+\.(zip|exe|pck|msi)"/i, /href="[^"]*itch\.io[^"]*\/(download|purchase)[^"]*"/i];
+// No build files and no visible link to itch.io at all (the itch page is key-only). The itch URL may only
+// appear inside JSON-LD (`sameAs`), which is not a link a visitor can follow.
+const DOWNLOADS = [/href="[^"]+\.(zip|exe|pck|msi)"/i, /href="[^"]*itch\.io[^"]*"/i, /src="[^"]*itch\.io[^"]*"/i];
 
 async function* htmlFiles(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true })) {

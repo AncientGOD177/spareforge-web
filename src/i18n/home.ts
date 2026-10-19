@@ -241,6 +241,7 @@ export const HOME = {
 export const ROADMAP = {
   en: {
     now: [
+      { v: '0.1.7', items: ['Class balance: similar damage for every class, supports heal and buff', '+20 % base EXP', 'Paid class change at Tutor Wennick', 'Shop confirm dialog and instant quantity input', 'Equipment docked to the inventory, drag to equip', 'Translations for 12 languages and fixes', 'Co-op needs everyone on 0.1.7'] },
       { v: '0.1.6', items: ['Skill effects for every active skill', '12 languages with a live switch', 'New-player tutorial and Guide book (F1)', 'Quest guidance on minimap and world map', 'Warrior and Vanguard tank pass', 'Auto-loot (V), buy back, refine glow'] },
       { v: '0.1.5', items: ['SpareForge gets its own names: Crowns, Apex bosses'] },
       { v: '0.1.4', items: ['Random affixes from Crude to Perfect', 'Reforging at the blacksmith', 'Cast speed and gloves'] },
@@ -249,6 +250,7 @@ export const ROADMAP = {
   },
   de: {
     now: [
+      { v: '0.1.7', items: ['Klassen-Balance: ähnlicher Schaden für alle Klassen, Supporter heilen und buffen', '+20 % Basis-EXP', 'Kostenpflichtiger Klassenwechsel bei Tutor Wennick', 'Shop-Bestätigungsdialog und sofortige Mengeneingabe', 'Ausrüstung am Inventar angedockt, per Drag-and-drop anlegen', 'Übersetzungen für 12 Sprachen und Fehlerbehebungen', 'Koop nur, wenn alle auf 0.1.7 sind'] },
       { v: '0.1.6', items: ['Eigene Effekte für jeden aktiven Skill', '12 Sprachen mit Live-Wechsel', 'Einsteiger-Tutorial und Handbuch (F1)', 'Quest-Wegweiser auf Minimap und Weltkarte', 'Tank-Überarbeitung für Krieger und Vorkämpfer', 'Auto-Loot (V), Rückkauf, Verfeinerungs-Glanz'] },
       { v: '0.1.5', items: ['SpareForge bekommt eigene Namen: Crowns, Apex-Bosse'] },
       { v: '0.1.4', items: ['Zufällige Affixe von Crude bis Perfect', 'Umschmieden beim Schmied', 'Zaubergeschwindigkeit und Handschuhe'] },
